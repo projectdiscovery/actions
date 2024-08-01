@@ -9,7 +9,7 @@ inputs:
   username:
     description: 'GitHub username'
     required: false
-    default: 'pdteamx'
+    default: 'ghost'
 outputs:
   email:
     description: "Configured git user's email"
