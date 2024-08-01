@@ -5,7 +5,7 @@ inputs:
   release:
     description: 'Run without snapshot'
     required: false
-    default: '--timeout=5m'
+    default: 'false'
 
 runs:
   using: "composite"
