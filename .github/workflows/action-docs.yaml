@@ -1,0 +1,19 @@
+name: "📝 Action Docs"
+
+on:
+  push:
+    branches: [ master ]
+    paths: [ "**/action.yaml" ]
+  workflow_dispatch:
+
+jobs:
+  action-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - uses: projectdiscovery/actions/setup/git@master
+      - run: npm i -g action-docs
+      - run: find . -name action.yaml -exec bash .github/scripts/action-docs.sh {} \;
+      - run: git push origin $GITHUB_REF_NAME
+        continue-on-error: true
