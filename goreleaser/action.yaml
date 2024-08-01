@@ -1,0 +1,17 @@
+name: 'GoReleaser'
+description: 'Run GoReleaser'
+
+inputs:
+  release:
+    description: 'Run without snapshot'
+    required: false
+    default: '--timeout=5m'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: projectdiscovery/actions/setup/go@v1
+    - uses: goreleaser/goreleaser-action@v6
+      with:
+        version: 'latest'
+        args: release --clean ${{ inputs.release != 'true' && '--snapshot' || '' }}
