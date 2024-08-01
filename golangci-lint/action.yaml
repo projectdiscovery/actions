@@ -1,0 +1,16 @@
+name: 'GolangCI Lint'
+description: 'Run GolangCI Lint'
+
+inputs:
+  args:
+    description: 'Run with arguments'
+    required: false
+    default: '--timeout=5m'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: projectdiscovery/actions/setup/go@v1
+    - uses: golangci/golangci-lint-action@v4
+      with:
+        args: ${{ inputs.args }}
