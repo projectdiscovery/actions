@@ -1,0 +1,31 @@
+name: 'Setup TemplateMan'
+description: "Install TemplateMan CLI"
+
+inputs:
+  token:
+    description: 'GitHub Token'
+    required: true
+    default: ''
+  version:
+    description: 'Setup with specific version'
+    required: false
+    default: 'latest'
+  go-version:
+    description: 'Specify Go version'
+    required: false
+    default: 'stable'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: projectdiscovery/actions/setup/go@v1
+      with:
+        go-version: '${{ inputs.go-version }}'
+    - run: git config --global url."https://${{ inputs.token }}@github.com/".insteadOf https://github.com/
+    - name: setup
+      id: setup
+      env:
+        VERSION: '${{ inputs.version }}'
+        GOPRIVATE: 'github.com/projectdiscovery/*'
+      run: $GITHUB_ACTION_PATH/main.sh
+      shell: bash
