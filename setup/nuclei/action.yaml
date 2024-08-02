@@ -30,6 +30,15 @@ runs:
     - uses: projectdiscovery/actions/setup/go@v1
       with:
         go-version: '${{ inputs.go-version }}'
+    - uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/.cache/nuclei
+          ~/go/pkg/mod
+        key: go-${{ inputs.go-version }}_nuclei-${{ inputs.version }}_${{ runner.os }}
+        restore-keys: |
+          go-${{ inputs.go-version }}_nuclei-${{ inputs.version }}_
     - name: setup
       id: setup
       env:
