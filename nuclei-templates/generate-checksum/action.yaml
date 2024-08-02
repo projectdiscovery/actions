@@ -1,0 +1,32 @@
+name: 'Generate Checksum'
+description: 'Generate Nuclei Templates Checksum'
+
+inputs:
+  version:
+    description: 'Setup with specific version'
+    required: false
+    default: 'latest'
+  templates-directory:
+    description: 'Specify Nuclei templates directory'
+    required: false
+    default: '/home/runner/work/nuclei-templates/nuclei-templates'
+  checksum-file:
+    description: 'Specify checksum file output'
+    required: true
+    default: ''
+
+runs:
+  using: "composite"
+  steps:
+    - uses: projectdiscovery/actions/setup/go@v1
+      with:
+        version: 'stable'
+    - run: go install -v "github.com/projectdiscovery/nuclei/v3/cmd/generate-checksum@${VERSION}"
+      env:
+        VERSION: '${{ inputs.version }}'
+      shell: bash
+    - run: generate-checksum "${TEMPLATES_DIRECTORY}" "${CHECKSUM_FILE}"
+      env:
+        TEMPLATES_DIRECTORY: '${{ inputs.templates-directory }}'
+        CHECKSUM_FILE: '${{ inputs.checksum-file }}'
+      shell: bash
