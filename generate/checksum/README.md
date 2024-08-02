@@ -9,6 +9,7 @@ Generate Nuclei Templates Checksum
 | `version` | <p>Setup with specific version</p> | `false` | `latest` |
 | `templates-directory` | <p>Specify Nuclei templates directory</p> | `false` | `/home/runner/work/nuclei-templates/nuclei-templates` |
 | `checksum-file` | <p>Specify checksum file output</p> | `true` | `""` |
+| `go-version` | <p>Specify Go version</p> | `false` | `stable` |
 
 
 ## Runs
@@ -37,6 +38,12 @@ This action is a `composite` action.
     #
     # Required: true
     # Default: ""
+
+    go-version:
+    # Specify Go version
+    #
+    # Required: false
+    # Default: stable
 ```
 
 
