@@ -1,14 +1,15 @@
 ## Description
 
-Generate Nuclei Templates Checksum
+Generate Nuclei Templates Database Indexer
 
 ## Inputs
 
 | name | description | required | default |
 | --- | --- | --- | --- |
+| `token` | <p>GitHub Token</p> | `true` | `""` |
 | `version` | <p>Setup with specific version</p> | `false` | `latest` |
-| `templates-directory` | <p>Specify Nuclei templates directory</p> | `false` | `/home/runner/work/nuclei-templates/nuclei-templates` |
-| `checksum-file` | <p>Specify checksum file output</p> | `true` | `""` |
+| `mode` | <p>Specify mode of operation (templates/changelog)</p> | `true` | `templates` |
+| `args` | <p>Specify additional arguments</p> | `false` | `""` |
 
 
 ## Runs
@@ -20,22 +21,28 @@ This action is a `composite` action.
 ```yaml
 - uses: ***PROJECT***@***VERSION***
   with:
+    token:
+    # GitHub Token
+    #
+    # Required: true
+    # Default: ""
+
     version:
     # Setup with specific version
     #
     # Required: false
     # Default: latest
 
-    templates-directory:
-    # Specify Nuclei templates directory
-    #
-    # Required: false
-    # Default: /home/runner/work/nuclei-templates/nuclei-templates
-
-    checksum-file:
-    # Specify checksum file output
+    mode:
+    # Specify mode of operation (templates/changelog)
     #
     # Required: true
+    # Default: templates
+
+    args:
+    # Specify additional arguments
+    #
+    # Required: false
     # Default: ""
 ```
 
