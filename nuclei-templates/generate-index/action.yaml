@@ -1,0 +1,48 @@
+name: 'Generate DB Indexer'
+description: 'Generate Nuclei Templates Database Indexer'
+
+inputs:
+  token:
+    description: 'GitHub Token'
+    required: true
+    default: ''
+  version:
+    description: 'Setup with specific version'
+    required: false
+    default: 'latest'
+  mode:
+    description: 'Specify mode of operation (templates/changelog)'
+    required: true
+    default: 'templates'
+  args:
+    description: 'Specify additional arguments'
+    required: false
+    default: ''
+
+runs:
+  using: "composite"
+  steps:
+    - uses: projectdiscovery/actions/setup/go@v1
+      with:
+        go-version: 'stable'
+    - run: git config --global url."https://${TOKEN}@github.com/".insteadOf https://github.com/
+      env:
+        TOKEN: '${{ inputs.token }}'
+      shell: bash
+    - uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: go-${{ inputs.go-version }}_generate-indexer-${{ inputs.version }}_${{ runner.os }}
+        restore-keys: |
+          go-${{ inputs.go-version }}_generate-indexer-${{ inputs.version }}_
+    - run: $GITHUB_ACTION_PATH/setup.sh
+      env:
+        VERSION: '${{ inputs.version }}'
+      shell: bash
+    - run: eval "generate-index -mode ${MODE} ${ARGS}"
+      env:
+        MODE: '${{ inputs.mode }}'
+        ARGS: '${{ inputs.args }}'
+      shell: bash
