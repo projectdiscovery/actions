@@ -22,6 +22,7 @@ runs:
       with:
         go-version: '${{ inputs.go-version }}'
     - run: git config --global url."https://${{ inputs.token }}@github.com/".insteadOf https://github.com/
+      shell: bash
     - name: setup
       id: setup
       env:
