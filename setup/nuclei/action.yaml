@@ -6,6 +6,10 @@ inputs:
     description: 'Setup with specific version'
     required: false
     default: 'latest'
+  go-version:
+    description: 'Specify Go version'
+    required: false
+    default: 'stable'
 outputs:
   version:
     description: 'Installed Nuclei engine version'
@@ -23,6 +27,9 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - uses: projectdiscovery/actions/setup/go@v1
+      with:
+        go-version: '${{ inputs.go-version }}'
     - name: setup
       id: setup
       env:

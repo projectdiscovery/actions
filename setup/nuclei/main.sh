@@ -11,6 +11,8 @@ function locateCmd() {
 
 locateCmd "go"
 
+echo "::debug::Using $(go version)"
+
 echo "::debug::Installing Nuclei ${VERSION}"
 install=$(go install -v "github.com/projectdiscovery/nuclei/v3/cmd/nuclei@${VERSION}")
 
