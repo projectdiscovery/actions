@@ -1,0 +1,31 @@
+name: 'Setup Nuclei'
+description: "Install Nuclei engine"
+
+inputs:
+  version:
+    description: 'Setup with specific version'
+    required: false
+    default: 'latest'
+outputs:
+  version:
+    description: 'Installed Nuclei engine version'
+    value: '${{ steps.setup.outputs.version }}'
+  config_dir:
+    description: 'Nuclei config directory'
+    value: '${{ steps.setup.outputs.config_dir }}'
+  cache_dir:
+    description: 'Nuclei cache directory'
+    value: '${{ steps.setup.outputs.cache_dir }}'
+  pdcp_dir:
+    description: 'ProjectDiscovery Cloud Platform directory'
+    value: '${{ steps.setup.outputs.pdcp_dir }}'
+
+runs:
+  using: "composite"
+  steps:
+    - name: setup
+      id: setup
+      env:
+        VERSION: "${{ inputs.version }}"
+      run: $GITHUB_ACTION_PATH/main.sh
+      shell: bash
