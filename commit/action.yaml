@@ -1,0 +1,21 @@
+name: 'Commit files'
+description: "Run git-commit"
+
+inputs:
+  files:
+    description: 'Files to commit (newline-separated)'
+    required: true
+    default: ''
+  message:
+    description: 'Commit message'
+    required: true
+    default: ''
+
+runs:
+  using: "composite"
+  steps:
+    - run: $GITHUB_ACTION_PATH/main.sh
+      env:
+        FILES: '${{ inputs.files }}'
+        MESSAGE: '${{ inputs.MESSAGE }}'
+      shell: bash
