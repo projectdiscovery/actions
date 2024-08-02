@@ -31,10 +31,8 @@ runs:
         key: go-${{ inputs.go-version }}_templateman-${{ inputs.version }}_${{ runner.os }}
         restore-keys: |
           go-${{ inputs.go-version }}_templateman-${{ inputs.version }}_
-    - name: setup
-      id: setup
+    - run: $GITHUB_ACTION_PATH/main.sh
       env:
         VERSION: '${{ inputs.version }}'
         GOPRIVATE: 'github.com/projectdiscovery/*'
-      run: $GITHUB_ACTION_PATH/main.sh
       shell: bash
