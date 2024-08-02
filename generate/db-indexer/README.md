@@ -10,6 +10,7 @@ Generate Nuclei Templates Database Indexer
 | `version` | <p>Setup with specific version</p> | `false` | `latest` |
 | `mode` | <p>Specify mode of operation (templates/changelog)</p> | `true` | `templates` |
 | `args` | <p>Specify additional arguments</p> | `false` | `""` |
+| `go-version` | <p>Specify Go version</p> | `false` | `stable` |
 
 
 ## Runs
@@ -44,6 +45,12 @@ This action is a `composite` action.
     #
     # Required: false
     # Default: ""
+
+    go-version:
+    # Specify Go version
+    #
+    # Required: false
+    # Default: stable
 ```
 
 
