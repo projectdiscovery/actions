@@ -21,7 +21,9 @@ runs:
     - uses: projectdiscovery/actions/setup/go@v1
       with:
         go-version: '${{ inputs.go-version }}'
-    - run: git config --global url."https://${{ inputs.token }}@github.com/".insteadOf https://github.com/
+    - run: git config --global url."https://${TOKEN}@github.com/".insteadOf https://github.com/
+      env:
+        TOKEN: '${{ inputs.token }}'
       shell: bash
     - uses: actions/cache@v4
       with:
