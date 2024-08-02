@@ -18,6 +18,10 @@ inputs:
     description: 'Specify additional arguments'
     required: false
     default: ''
+  go-version:
+    description: 'Specify Go version'
+    required: false
+    default: 'stable'
 
 runs:
   using: "composite"
