@@ -7,6 +7,7 @@ Install Nuclei engine
 | name | description | required | default |
 | --- | --- | --- | --- |
 | `version` | <p>Setup with specific version</p> | `false` | `latest` |
+| `go-version` | <p>Specify Go version</p> | `false` | `stable` |
 
 
 ## Outputs
@@ -33,6 +34,12 @@ This action is a `composite` action.
     #
     # Required: false
     # Default: latest
+
+    go-version:
+    # Specify Go version
+    #
+    # Required: false
+    # Default: stable
 ```
 
 
