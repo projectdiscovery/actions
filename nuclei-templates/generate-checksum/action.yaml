@@ -20,7 +20,7 @@ runs:
   steps:
     - uses: projectdiscovery/actions/setup/go@v1
       with:
-        version: 'stable'
+        go-version: 'stable'
     - run: go install -v "github.com/projectdiscovery/nuclei/v3/cmd/generate-checksum@${VERSION}"
       env:
         VERSION: '${{ inputs.version }}'
