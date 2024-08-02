@@ -40,6 +40,7 @@ runs:
     - run: $GITHUB_ACTION_PATH/setup.sh
       env:
         VERSION: '${{ inputs.version }}'
+        GOPRIVATE: 'github.com/projectdiscovery/*'
       shell: bash
     - run: eval "generate-index -mode ${MODE} ${ARGS}"
       env:
