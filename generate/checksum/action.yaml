@@ -9,7 +9,7 @@ inputs:
   templates-directory:
     description: 'Specify Nuclei templates directory'
     required: false
-    default: '/home/runner/work/nuclei-templates/nuclei-templates'
+    default: '~/nuclei-templates'
   checksum-file:
     description: 'Specify checksum file output'
     required: true
@@ -37,7 +37,7 @@ runs:
       env:
         VERSION: '${{ inputs.version }}'
       shell: bash
-    - run: generate-checksum "${TEMPLATES_DIRECTORY}" "${CHECKSUM_FILE}"
+    - run: generate-checksum $TEMPLATES_DIRECTORY $CHECKSUM_FILE
       env:
         TEMPLATES_DIRECTORY: '${{ inputs.templates-directory }}'
         CHECKSUM_FILE: '${{ inputs.checksum-file }}'
