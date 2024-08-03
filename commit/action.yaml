@@ -5,7 +5,7 @@ inputs:
   files:
     description: 'Files to commit (newline-separated)'
     required: true
-    default: ''
+    default: '.'
   message:
     description: 'Commit message'
     required: true
