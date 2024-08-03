@@ -6,7 +6,7 @@ Run git-commit
 
 | name | description | required | default |
 | --- | --- | --- | --- |
-| `files` | <p>Files to commit (newline-separated)</p> | `true` | `""` |
+| `files` | <p>Files to commit (newline-separated)</p> | `true` | `.` |
 | `message` | <p>Commit message</p> | `true` | `""` |
 
 
@@ -23,7 +23,7 @@ This action is a `composite` action.
     # Files to commit (newline-separated)
     #
     # Required: true
-    # Default: ""
+    # Default: .
 
     message:
     # Commit message
