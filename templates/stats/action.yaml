@@ -1,0 +1,49 @@
+name: 'Nuclei Templates Stats'
+description: 'Extracting various meta data from nuclei-templates'
+
+inputs:
+  version:
+    description: 'Setup with specific version'
+    required: false
+    default: 'latest'
+  path:
+    description: 'Path to Nuclei templates directory'
+    required: false
+    default: ''
+  output:
+    description: 'File to write template addition author output'
+    required: false
+    default: ''
+  args:
+    description: 'Specify additional arguments'
+    required: false
+    default: ''
+  go-version:
+    description: 'Specify Go version'
+    required: false
+    default: 'stable'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: projectdiscovery/actions/setup/go@v1
+      with:
+        go-version: 'stable'
+    - uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: go-${{ inputs.go-version }}_template-stats-${{ inputs.version }}_${{ runner.os }}
+        restore-keys: |
+          go-${{ inputs.go-version }}_template-stats-${{ inputs.version }}_
+    - run: go install -v "github.com/projectdiscovery/templates-stats@${VERSION}"
+      env:
+        VERSION: '${{ inputs.version }}'
+      shell: bash
+    - run: eval "template-stats -path '${TEMPLATES_DIRECTORY}' -output '${OUTPUT}' $ARGS"
+      env:
+        TEMPLATES_DIRECTORY: '${{ inputs.path }}'
+        OUTPUT: '${{ inputs.output }}'
+        ARGS: '${{ inputs.args }}'
+      shell: bash

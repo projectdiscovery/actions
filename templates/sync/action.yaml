@@ -1,0 +1,16 @@
+name: 'Nuclei Templates Sync'
+description: 'Early nuclei templates synchronize'
+
+inputs:
+  token:
+    description: 'GitHub Token'
+    required: true
+    default: ''
+
+runs:
+  using: "composite"
+  steps:
+    - run: gh auth login --with-token <<< $GITHUB_TOKEN
+      env:
+        GITHUB_TOKEN: '${{ inputs.token }}'
+    - run: gh workflow -R projectdiscovery/early-templates run reposync.yml --ref main
