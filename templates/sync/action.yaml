@@ -10,9 +10,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: gh auth login --with-token <<< $GITHUB_TOKEN
+    - run: gh auth login --with-token <<< $TOKEN
       env:
-        GITHUB_TOKEN: '${{ inputs.token }}'
+        TOKEN: '${{ inputs.token }}'
       shell: bash
     - run: gh workflow -R projectdiscovery/early-templates run reposync.yml --ref main
       shell: bash
