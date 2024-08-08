@@ -13,4 +13,6 @@ runs:
     - run: gh auth login --with-token <<< $GITHUB_TOKEN
       env:
         GITHUB_TOKEN: '${{ inputs.token }}'
+      shell: bash
     - run: gh workflow -R projectdiscovery/early-templates run reposync.yml --ref main
+      shell: bash
