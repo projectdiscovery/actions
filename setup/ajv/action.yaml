@@ -1,0 +1,17 @@
+name: 'Setup Ajv CLI'
+description: "Install Ajv CLI - The fastest JSON schema Validator"
+
+inputs:
+  node-version:
+    description: 'Specify Node version'
+    required: false
+    default: 'latest'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '${{ inputs.node-version }}'
+    - run: npm i -g ajv-cli
+      shell: bash
