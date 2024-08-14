@@ -17,5 +17,5 @@ runs:
     - run: $GITHUB_ACTION_PATH/main.sh
       env:
         FILES: '${{ inputs.files }}'
-        MESSAGE: '${{ inputs.MESSAGE }}'
+        MESSAGE: '${{ inputs.message }}'
       shell: bash
