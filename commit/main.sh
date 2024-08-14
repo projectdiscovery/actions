@@ -10,5 +10,5 @@ while IFS= read -r file; do
     [[ $? -gt 0 ]] && echo "::warning::${add}"
 done <<< "${FILES}"
 
-commit=$(git commit -m "${MESSAGE}")
+commit=$(git commit -m "${MESSAGE}" 2>&1)
 [[ $? -gt 0 ]] && echo "::warning::Could not create commit: $(tail -n 1 <<< "${commit}")"
