@@ -14,5 +14,5 @@ runs:
       env:
         TOKEN: '${{ inputs.token }}'
       shell: bash
-    - run: gh workflow -R projectdiscovery/early-templates run reposync.yml --ref main
+    - run: gh workflow -R projectdiscovery/early-templates run repo-sync.yml --ref main
       shell: bash
