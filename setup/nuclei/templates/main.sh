@@ -2,6 +2,7 @@
 
 set -euo pipefail
 
+TARGET=$(eval realpath "${TARGET}")
 NUCLEI_TEMPLATES="projectdiscovery/nuclei-templates"
 NUCLEI_TEMPLATES_URL="https://github.com/${NUCLEI_TEMPLATES}"
 
@@ -24,10 +25,10 @@ wget "${downloadURL}" -qO nuclei-templates.zip
 echo "::debug::Extracting Nuclei templates"
 unzip -q nuclei-templates.zip -d ./nuclei-templates
 
-echo "::debug::Creating target directory"
+echo "::debug::Creating "${TARGET}" directory"
 mkdir -p "${TARGET}"
 
-echo "::debug::Copying to target directory"
+echo "::debug::Copying to "${TARGET}" directory"
 cp -r ./nuclei-templates/*/* "${TARGET}"
 
 echo "::debug::Revert working directory"
