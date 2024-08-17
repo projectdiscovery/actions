@@ -1,0 +1,22 @@
+name: 'Setup Nuclei templates'
+description: "Download Nuclei templates"
+
+inputs:
+  version:
+    description: 'Download specific version (latest, stable, vX.Y.Z)'
+    required: true
+    default: 'stable'
+  target:
+    description: 'Target directory to install'
+    required: true
+    default: '~/nuclei-templates'
+
+runs:
+  using: "composite"
+  steps:
+    - name: setup
+      env:
+        VERSION: "${{ inputs.version }}"
+        TARGET: "${{ inputs.target }}"
+      run: $GITHUB_ACTION_PATH/main.sh
+      shell: bash
