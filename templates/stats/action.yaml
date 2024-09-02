@@ -42,9 +42,11 @@ runs:
     #   env:
     #     VERSION: '${{ inputs.version }}'
     #   shell: bash
-    - run: git clone https://github.com/projectdiscovery/templates-stats
-      shell: bash
-    - run: cd templates-stats/ && go install -v .
+    - run: |
+        if ! [[ -x "$(command -v templates-stats)" ]]; then
+          git clone https://github.com/projectdiscovery/templates-stats /tmp/templates-stats
+          cd /tmp/templates-stats && go install -v .
+        fi
       shell: bash
     - run: eval "templates-stats -path '${TEMPLATES_DIRECTORY}' -output '${OUTPUT}' $ARGS"
       env:
