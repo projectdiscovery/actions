@@ -37,11 +37,16 @@ runs:
         key: go-${{ inputs.go-version }}_template-stats-${{ inputs.version }}_${{ runner.os }}
         restore-keys: |
           go-${{ inputs.go-version }}_template-stats-${{ inputs.version }}_
-    - run: go install -v "github.com/projectdiscovery/templates-stats@${VERSION}"
-      env:
-        VERSION: '${{ inputs.version }}'
+    # # TODO: Something wrong with the Go modules
+    # - run: go install -v "github.com/projectdiscovery/templates-stats@${VERSION}"
+    #   env:
+    #     VERSION: '${{ inputs.version }}'
+    #   shell: bash
+    - run: git clone https://github.com/projectdiscovery/templates-stats
       shell: bash
-    - run: eval "template-stats -path '${TEMPLATES_DIRECTORY}' -output '${OUTPUT}' $ARGS"
+    - run: cd templates-stats/ && go install -v .
+      shell: bash
+    - run: eval "templates-stats -path '${TEMPLATES_DIRECTORY}' -output '${OUTPUT}' $ARGS"
       env:
         TEMPLATES_DIRECTORY: '${{ inputs.path }}'
         OUTPUT: '${{ inputs.output }}'
