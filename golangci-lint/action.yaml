@@ -10,6 +10,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/golangci-lint
+        key: golangci-lint_${{ runner.os }}
+        restore-keys: golangci-lint_
     - uses: golangci/golangci-lint-action@v6
       with:
         args: ${{ inputs.args }}
