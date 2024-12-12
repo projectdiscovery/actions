@@ -1,0 +1,31 @@
+name: 'Flamegraphs Profile Uploader'
+description: "Upload a CPU profile to get a publicly sharable link"
+
+inputs:
+  profile:
+    description: 'Path to profile file'
+    required: true
+  name:
+    description: 'Profile name'
+    required: false
+
+outputs:
+  key:
+    description: 'Flamegraph key'
+    value: '${{ steps.flamegraph.outputs.key }}'
+  url:
+    description: 'Flamegraph public URL'
+    value: '${{ steps.flamegraph.outputs.url }}'
+  message:
+    description: 'Error message'
+    value: '${{ steps.flamegraph.outputs.message }}'
+
+runs:
+  using: "composite"
+  steps:
+    - run: $GITHUB_ACTION_PATH/main.sh
+      name: flamegraph
+      env:
+        INPUT_PROF: '${{ inputs.profile }}'
+        INPUT_NAME: '${{ inputs.name }}'
+      shell: bash
