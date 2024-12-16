@@ -12,8 +12,10 @@ function locateCmd() {
 locateCmd "curl"
 locateCmd "jq"
 
+INPUT_NAME=$(echo -n "${INPUT_NAME}" | jq -sRr @uri) # to url-encoded
 INPUT_PROF=$(eval realpath "${INPUT_PROF}")
 BASE_INPUT_PROF=$(basename "${INPUT_PROF}")
+BASE_INPUT_PROF=$(echo -n "${BASE_INPUT_PROF}" | jq -sRr @uri) # to url-encoded
 
 upload=$(curl --data-binary "@${INPUT_PROF}" "https://flamegraph.com/?name=${INPUT_NAME}&file_name=${BASE_INPUT_PROF}")
 
