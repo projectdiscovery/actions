@@ -2,23 +2,17 @@
 
 set -euo pipefail
 
-function locateCmd() {
-    which $1 >/dev/null || {
-        echo "::error::Could not find $1"
-        exit 1
-    }
-}
+source "$(git rev-parse --show-toplevel)/.bash_aliases"
 
-locateCmd "go"
+cmdMustExists "go"
 
-echo "::debug::Using $(go version)"
-
-echo "::debug::Installing Nuclei ${VERSION}"
+printDebug "Using $(go version)"
+printDebug "Installing Nuclei ${VERSION}"
 install=$(go install -v "github.com/projectdiscovery/nuclei/v3/cmd/nuclei@${VERSION}")
 
-locateCmd "nuclei"
+cmdMustExists "nuclei"
 
-echo "::debug::Getting Nuclei version"
+printDebug "Getting Nuclei version"
 get_version=$(nuclei --version 2>&1)
 
 version=$(echo "${get_version}" | awk '/Nuclei Engine Version:/ {print $NF}')

@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+source "$(git rev-parse --show-toplevel)/.bash_aliases"
+
 TARGET=$(eval realpath "${TARGET}")
 NUCLEI_TEMPLATES="projectdiscovery/nuclei-templates"
 NUCLEI_TEMPLATES_URL="https://github.com/${NUCLEI_TEMPLATES}"
@@ -16,20 +18,20 @@ else
     downloadURL="${NUCLEI_TEMPLATES_URL}/archive/refs/tags/${VERSION}.zip"
 fi
 
-echo "::debug::Changing working directory to /tmp"
+printDebug "Changing working directory to /tmp"
 cd /tmp
 
-echo "::debug::Downloading Nuclei templates (${VERSION})"
+printDebug "Downloading Nuclei templates (${VERSION})"
 wget "${downloadURL}" -qO nuclei-templates.zip
 
-echo "::debug::Extracting Nuclei templates"
+printDebug "Extracting Nuclei templates"
 unzip -q nuclei-templates.zip -d ./nuclei-templates
 
-echo "::debug::Creating "${TARGET}" directory"
+printDebug "Creating "${TARGET}" directory"
 mkdir -p "${TARGET}"
 
-echo "::debug::Copying to "${TARGET}" directory"
+printDebug "Copying to "${TARGET}" directory"
 cp -r ./nuclei-templates/*/* "${TARGET}"
 
-echo "::debug::Revert working directory"
+printDebug "Revert working directory"
 cd -

@@ -2,15 +2,10 @@
 
 set -euo pipefail
 
-function locateCmd() {
-    which $1 >/dev/null || {
-        echo "::error::Could not find $1"
-        exit 1
-    }
-}
+source "$(git rev-parse --show-toplevel)/.bash_aliases"
 
-locateCmd "curl"
-locateCmd "jq"
+cmdMustExists "curl"
+cmdMustExists "jq"
 
 INPUT_NAME=$(echo -n "${INPUT_NAME}" | jq -sRr @uri) # to url-encoded
 INPUT_PROF=$(eval realpath "${INPUT_PROF}")
@@ -30,6 +25,6 @@ flamegraph_message=$(jq -r '.message | walk(if . == null then "" else . end)' <<
 } >> $GITHUB_OUTPUT
 
 if [[ -n "${flamegraph_message}" ]]; then
-    echo "::error::${flamegraph_message}"
+    printError "${flamegraph_message}"
     exit 1
 fi
