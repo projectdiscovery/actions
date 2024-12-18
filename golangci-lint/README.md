@@ -16,7 +16,7 @@ This action is a `composite` action.
 ## Usage
 
 ```yaml
-- uses: ***PROJECT***@***VERSION***
+- uses: projectdiscovery/actions/golangci-lint@v1
   with:
     args:
     # Run with arguments
