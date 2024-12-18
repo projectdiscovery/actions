@@ -19,7 +19,7 @@ This action is a `composite` action.
 ## Usage
 
 ```yaml
-- uses: ***PROJECT***@***VERSION***
+- uses: projectdiscovery/actions/generate/checksum@v1
   with:
     version:
     # Setup with specific version
