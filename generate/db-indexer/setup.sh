@@ -2,18 +2,12 @@
 
 set -euo pipefail
 
-function locateCmd() {
-    which $1 >/dev/null || {
-        echo "::error::Could not find $1"
-        exit 1
-    }
-}
+source "$(git rev-parse --show-toplevel)/.bash_aliases"
 
-locateCmd "go"
+cmdMustExists "go"
 
-echo "::debug::Using $(go version)"
-
-echo "::debug::Installing Generate Index CLI ${VERSION}"
+printDebug "Using $(go version)"
+printDebug "Installing Generate Index CLI ${VERSION}"
 install=$(go install -v "github.com/projectdiscovery/nucleish-api/cmd/generate-index@${VERSION}")
 
-locateCmd "generate-index"
+cmdMustExists "generate-index"
