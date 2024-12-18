@@ -17,7 +17,7 @@ This action is a `composite` action.
 ## Usage
 
 ```yaml
-- uses: ***PROJECT***@***VERSION***
+- uses: projectdiscovery/actions/commit@v1
   with:
     files:
     # Files to commit (newline-separated)
