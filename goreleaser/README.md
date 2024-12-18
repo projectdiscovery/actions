@@ -16,7 +16,7 @@ This action is a `composite` action.
 ## Usage
 
 ```yaml
-- uses: ***PROJECT***@***VERSION***
+- uses: projectdiscovery/actions/goreleaser@v1
   with:
     release:
     # Run without snapshot
