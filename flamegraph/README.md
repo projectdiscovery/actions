@@ -26,7 +26,7 @@ This action is a `composite` action.
 ## Usage
 
 ```yaml
-- uses: ***PROJECT***@***VERSION***
+- uses: projectdiscovery/actions/flamegraph@v1
   with:
     profile:
     # Path to profile file
