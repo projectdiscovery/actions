@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+source "$(git rev-parse --show-toplevel)/.bash_aliases"
+
 printDebug "Prepend user's ID to user's email"
 if [[ "${USERNAME}" == "${GITHUB_ACTOR}" ]]; then
 	EMAIL="${GITHUB_ACTOR_ID}+${EMAIL}"
