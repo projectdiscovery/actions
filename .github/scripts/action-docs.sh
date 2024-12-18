@@ -19,7 +19,7 @@ function generateDocs() {
 
 	# replace placeholders
 	sed -i -e "s|\*\*\*PROJECT\*\*\*|${GITHUB_REPOSITORY}/${dir##./}|g" "${doc}"
-	sed -i -e "s|\*\*\*VERSION\*\*\*|${tag}@g" "${doc}"
+	sed -i -e "s|\*\*\*VERSION\*\*\*|${tag}|g" "${doc}"
 
 	[[ "$(git status -s | wc -l)" -gt "0" ]] && commit "${dir}"
 }
