@@ -16,7 +16,7 @@ This action is a `composite` action.
 ## Usage
 
 ```yaml
-- uses: ***PROJECT***@***VERSION***
+- uses: projectdiscovery/actions/setup/ajv@v1
   with:
     node-version:
     # Specify Node version
