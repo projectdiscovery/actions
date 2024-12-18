@@ -20,7 +20,7 @@ This action is a `composite` action.
 ## Usage
 
 ```yaml
-- uses: ***PROJECT***@***VERSION***
+- uses: projectdiscovery/actions/templates/stats@v1
   with:
     version:
     # Setup with specific version
