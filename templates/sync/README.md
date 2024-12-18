@@ -16,7 +16,7 @@ This action is a `composite` action.
 ## Usage
 
 ```yaml
-- uses: ***PROJECT***@***VERSION***
+- uses: projectdiscovery/actions/templates/sync@v1
   with:
     token:
     # GitHub Token
