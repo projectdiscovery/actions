@@ -3,6 +3,32 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     labels:
       - "Type: Maintenance"
+
+  - package-ecosystem: "github-actions"
+    directories: # find . -name action.yaml -exec bash -c 'dirname "${1##.}"' bash {} \;
+      - "/commit"
+      - "/flamegraph"
+      - "/generate/checksum"
+      - "/generate/db-indexer"
+      - "/golangci-lint"
+      - "/goreleaser"
+      - "/setup/ajv"
+      - "/setup/git"
+      - "/setup/go"
+      - "/setup/nuclei"
+      - "/setup/nuclei/templates"
+      - "/setup/templateman"
+      - "/templates/stats"
+      - "/templates/sync"
+    schedule:
+      interval: "weekly"
+    groups:
+      composites:
+        patterns: ["*"]
+        exclude-patterns: ["projectdiscovery/actions*"]
+    labels:
+      - "Type: Maintenance"
+
