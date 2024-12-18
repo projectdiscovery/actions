@@ -17,7 +17,7 @@ This action is a `composite` action.
 ## Usage
 
 ```yaml
-- uses: ***PROJECT***@***VERSION***
+- uses: projectdiscovery/actions/setup/nuclei/templates@v1
   with:
     version:
     # Download specific version (latest, stable, vX.Y.Z)
