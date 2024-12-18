@@ -24,7 +24,7 @@ This action is a `composite` action.
 ## Usage
 
 ```yaml
-- uses: ***PROJECT***@***VERSION***
+- uses: projectdiscovery/actions/setup/git@v1
   with:
     scope:
     # Scope for configured git user
