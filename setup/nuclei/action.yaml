@@ -23,4 +23,4 @@ runs:
         script: |
           const tc = require('@actions/tool-cache')
           const dl = require(process.env.GITHUB_ACTION_PATH + '/download.js')
-          await dl({github, context, core})
+          await dl({github, context, core, tc})

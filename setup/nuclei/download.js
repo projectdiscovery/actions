@@ -1,7 +1,6 @@
-module.exports = async ({github, context, core}) => {
+module.exports = async ({github, _, core, tc}) => {
   let version = process.env.INPUT_VERSION
   const path = require('path')
-  const tc = require('@actions/tool-cache')
   const os = process.env.RUNNER_OS === "macOS" || process.env.RUNNER_OS.toLowerCase()
   const arch = process.env.RUNNER_ARCH.toLowerCase()
     .replace('x86', '386')
