@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-source "$(git rev-parse --show-toplevel)/.bash_aliases"
+source "$(sed "s|\(.*projectdiscovery/actions/[^/]*\).*|\1|" <<< "$GITHUB_ACTION_PATH")/.bash_aliases"
 
 valid_scopes=("global" "system" "local" "worktree")
 
