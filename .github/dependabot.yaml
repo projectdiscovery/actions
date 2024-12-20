@@ -32,3 +32,14 @@ updates:
     labels:
       - "Type: Maintenance"
 
+  - package-ecosystem: "npm"
+    directories: # find . -name package.json -not -path "*/node_modules/*" -exec bash -c 'dirname "${1##.}"' bash {} \;
+      - "/setup/nuclei"
+    schedule:
+      interval: "weekly"
+    groups:
+      node_modules:
+        patterns: ["*"]
+    labels:
+      - "Type: Maintenance"
+
