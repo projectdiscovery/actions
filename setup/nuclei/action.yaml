@@ -3,45 +3,23 @@ description: "Install Nuclei engine"
 
 inputs:
   version:
-    description: 'Setup with specific version'
-    required: false
+    description: 'Setup with specific version ("latest" or in format "vX.Y.Z")'
+    required: true
     default: 'latest'
-  go-version:
-    description: 'Specify Go version'
-    required: false
-    default: 'stable'
-outputs:
-  version:
-    description: 'Installed Nuclei engine version'
-    value: '${{ steps.setup.outputs.version }}'
-  config_dir:
-    description: 'Nuclei config directory'
-    value: '${{ steps.setup.outputs.config_dir }}'
-  cache_dir:
-    description: 'Nuclei cache directory'
-    value: '${{ steps.setup.outputs.cache_dir }}'
-  pdcp_dir:
-    description: 'ProjectDiscovery Cloud Platform directory'
-    value: '${{ steps.setup.outputs.pdcp_dir }}'
 
 runs:
   using: "composite"
   steps:
-    - uses: projectdiscovery/actions/setup/go@v1
+    - uses: actions/setup-node@v3
       with:
-        go-version: '${{ inputs.go-version }}'
-    - uses: actions/cache@v4
-      with:
-        path: |
-          ~/.cache/go-build
-          ~/.cache/nuclei
-          ~/go/pkg/mod
-        key: go-${{ inputs.go-version }}_nuclei-${{ inputs.version }}_${{ runner.os }}
-        restore-keys: |
-          go-${{ inputs.go-version }}_nuclei-${{ inputs.version }}_
-    - name: setup
-      id: setup
-      env:
-        VERSION: "${{ inputs.version }}"
-      run: $GITHUB_ACTION_PATH/main.sh
+        node-version: '20.x'
+    - run: npm ci
       shell: bash
+    - uses: actions/script@v7
+      env:
+        INPUT_VERSION: '${{ inputs.version }}'
+      with:
+        script: |
+          const tc = require('@actions/tool-cache')
+          const dl = require(process.env.GITHUB_ACTION_PATH + '/download.js')
+          await dl({github, context, core})
