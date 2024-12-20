@@ -11,16 +11,18 @@ module.exports = async ({version, token}) => {
   const repo = {owner: 'projectdiscovery', repo: 'nuclei'}
   const octokit = github.getOctokit(token)
 
-  if (version === 'latest') {
-    const latestRelease = await octokit.rest.repos.getLatestRelease(repo)
-    version = latestRelease.data.tag_name
-  } else {
-    try {
+  try {
+    if (version === 'latest') {
+      core.debug('Getting latest release...')
+      const latestRelease = await octokit.rest.repos.getLatestRelease(repo)
+      version = latestRelease.data.tag_name
+      core.debug(`Found latest release: ${version}`)
+    } else {
+      core.debug(`Getting "${version}" tag...`)
       await octokit.rest.repos.getReleaseByTag({...repo, tag: version})
-    } catch (error) {
-      core.setFailed(`Could not get "${version}" tag: ${error.message}`)
-      process.exit(1)
     }
+  } catch (error) {
+    throw new Error(`Could not get "${version}" tag: ${error.message}`)    
   }
 
   const asset = `nuclei_${version.replace(/^v/, '')}_${os}_${arch}.zip`
@@ -29,7 +31,9 @@ module.exports = async ({version, token}) => {
   core.debug(`Checking cache for nuclei...`)
   let nucleiPath = tc.find('nuclei', version, arch)
 
-  if (!nucleiPath) {
+  if (nucleiPath) {
+    core.notice(`nuclei ${version} found in cache`)
+  } else {
     nucleiPath = path.join(process.env.GITHUB_WORKSPACE, '../', 'nuclei')
 
     let zipPath
@@ -37,8 +41,7 @@ module.exports = async ({version, token}) => {
       core.debug(`Downloading nuclei ${version} for ${os}/${arch}...`)
       zipPath = await tc.downloadTool(assetURL)
     } catch (error) {
-      core.setFailed(`Could not download nuclei: ${error.message}`)
-      process.exit(1)
+      throw new Error(`Could not download nuclei: ${error.message}`)
     }
 
     let extractedPath
@@ -46,8 +49,7 @@ module.exports = async ({version, token}) => {
       core.debug('Extracting nuclei...')
       extractedPath = await tc.extractZip(zipPath, nucleiPath)
     } catch (error) {
-      core.setFailed(`Could not extract nuclei: ${error.message}`)
-      process.exit(1)
+      throw new Error(`Could not extract nuclei: ${error.message}`)
     }
 
     core.debug('Caching nuclei...')
@@ -56,4 +58,5 @@ module.exports = async ({version, token}) => {
 
   core.debug('Adding nuclei to PATH...')
   core.addPath(nucleiPath)
+  core.info(`nuclei ${version} has been installed successfully`)
 }

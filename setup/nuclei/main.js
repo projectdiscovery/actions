@@ -8,4 +8,9 @@ if (version !== 'latest' && !version.match(/^v\d+\.\d+\.\d+$/)) {
   process.exit(1)
 }
 
-await dl({version, token})
+try {
+  await dl({version, token})
+} catch (error) {
+  core.setFailed(error.message)
+  process.exit(1)
+}
