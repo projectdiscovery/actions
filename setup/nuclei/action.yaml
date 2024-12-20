@@ -13,15 +13,15 @@ runs:
     - uses: actions/setup-node@v3
       with:
         node-version: '20.x'
+    - run: cd $GITHUB_ACTION_PATH
+      shell: bash
     - run: npm ci
       shell: bash
-      working-directory: '${{ github.action_path }}'
     - uses: actions/github-script@v7
       env:
         INPUT_VERSION: '${{ inputs.version }}'
-        NODE_PATH: '${{ github.action_path }}/node_modules'
       with:
         script: |
-          const tc = require(require.resolve('@actions/tool-cache', {paths: [process.env.NODE_PATH]}))
-          const dl = require(process.env.GITHUB_ACTION_PATH + '/download.js')
+          const tc = require('@actions/tool-cache')
+          const dl = require('download.js')
           await dl({github, context, core, tc})
