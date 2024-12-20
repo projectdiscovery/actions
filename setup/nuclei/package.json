@@ -1,0 +1,14 @@
+{
+  "name": "@projectdiscovery/actions/setup/nuclei",
+  "version": "1.0.0",
+  "description": "Setup Nuclei",
+  "main": "download.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "dwisiswant0",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/tool-cache": "^2.0.1"
+  }
+}
