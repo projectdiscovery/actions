@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source "$(git rev-parse --show-toplevel)/.bash_aliases"
+source "$(sed "s|\(.*projectdiscovery/actions/[^/]*\).*|\1|" <<< "$GITHUB_ACTION_PATH")/.bash_aliases"
 
 printDebug "Remove any trailing newlines from input files"
 FILES="$(echo -n "${FILES}")"

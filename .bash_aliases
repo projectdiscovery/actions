@@ -1,3 +1,8 @@
+# Usage:
+# `source "$(sed "s|\(.*projectdiscovery/actions/[^/]*\).*|\1|" <<< "$GITHUB_ACTION_PATH")/.bash_aliases"`
+# or
+# `source <(curl -fsSL "https://github.com/projectdiscovery/actions/raw/refs/heads/master/.bash_aliases")`
+
 function printDebug() {
     echo "::debug::${1}"
 }
