@@ -15,7 +15,7 @@ runs:
         node-version: '20.x'
     - run: npm ci
       shell: bash
-    - uses: actions/script@v7
+    - uses: actions/github-script@v7
       env:
         INPUT_VERSION: '${{ inputs.version }}'
       with:
