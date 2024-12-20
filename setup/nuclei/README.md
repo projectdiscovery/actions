@@ -6,18 +6,8 @@ Install Nuclei engine
 
 | name | description | required | default |
 | --- | --- | --- | --- |
-| `version` | <p>Setup with specific version</p> | `false` | `latest` |
-| `go-version` | <p>Specify Go version</p> | `false` | `stable` |
-
-
-## Outputs
-
-| name | description |
-| --- | --- |
-| `version` | <p>Installed Nuclei engine version</p> |
-| `config_dir` | <p>Nuclei config directory</p> |
-| `cache_dir` | <p>Nuclei cache directory</p> |
-| `pdcp_dir` | <p>ProjectDiscovery Cloud Platform directory</p> |
+| `version` | <p>Setup with specific version ("latest" or in format "vX.Y.Z")</p> | `true` | `latest` |
+| `token` | <p>GitHub Token</p> | `true` | `""` |
 
 
 ## Runs
@@ -30,16 +20,16 @@ This action is a `composite` action.
 - uses: projectdiscovery/actions/setup/nuclei@v1
   with:
     version:
-    # Setup with specific version
+    # Setup with specific version ("latest" or in format "vX.Y.Z")
     #
-    # Required: false
+    # Required: true
     # Default: latest
 
-    go-version:
-    # Specify Go version
+    token:
+    # GitHub Token
     #
-    # Required: false
-    # Default: stable
+    # Required: true
+    # Default: ""
 ```
 
 

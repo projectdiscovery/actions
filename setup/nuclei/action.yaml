@@ -3,45 +3,25 @@ description: "Install Nuclei engine"
 
 inputs:
   version:
-    description: 'Setup with specific version'
-    required: false
+    description: 'Setup with specific version ("latest" or in format "vX.Y.Z")'
+    required: true
     default: 'latest'
-  go-version:
-    description: 'Specify Go version'
-    required: false
-    default: 'stable'
-outputs:
-  version:
-    description: 'Installed Nuclei engine version'
-    value: '${{ steps.setup.outputs.version }}'
-  config_dir:
-    description: 'Nuclei config directory'
-    value: '${{ steps.setup.outputs.config_dir }}'
-  cache_dir:
-    description: 'Nuclei cache directory'
-    value: '${{ steps.setup.outputs.cache_dir }}'
-  pdcp_dir:
-    description: 'ProjectDiscovery Cloud Platform directory'
-    value: '${{ steps.setup.outputs.pdcp_dir }}'
+  token:
+    description: 'GitHub Token'
+    required: true
 
 runs:
   using: "composite"
   steps:
-    - uses: projectdiscovery/actions/setup/go@v1
+    - uses: oven-sh/setup-bun@v2
       with:
-        go-version: '${{ inputs.go-version }}'
-    - uses: actions/cache@v4
-      with:
-        path: |
-          ~/.cache/go-build
-          ~/.cache/nuclei
-          ~/go/pkg/mod
-        key: go-${{ inputs.go-version }}_nuclei-${{ inputs.version }}_${{ runner.os }}
-        restore-keys: |
-          go-${{ inputs.go-version }}_nuclei-${{ inputs.version }}_
-    - name: setup
-      id: setup
-      env:
-        VERSION: "${{ inputs.version }}"
-      run: $GITHUB_ACTION_PATH/main.sh
+        bun-version: latest
+    - run: bun i
       shell: bash
+      working-directory: '${{ github.action_path }}'
+    - run: bun main.js
+      env:
+        INPUT_TOKEN: '${{ inputs.token }}'
+        INPUT_VERSION: '${{ inputs.version }}'
+      shell: bash
+      working-directory: '${{ github.action_path }}'

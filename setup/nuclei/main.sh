@@ -1,4 +1,7 @@
 #!/bin/bash
+###
+# Deprecated: This action is deprecated and will be removed in the future.
+###
 
 set -euo pipefail
 
