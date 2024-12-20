@@ -13,15 +13,9 @@ runs:
     - uses: actions/setup-node@v3
       with:
         node-version: '20.x'
-    - run: cd $GITHUB_ACTION_PATH
-      shell: bash
     - run: npm ci
       shell: bash
-    - uses: actions/github-script@v7
-      env:
-        INPUT_VERSION: '${{ inputs.version }}'
-      with:
-        script: |
-          const tc = require('@actions/tool-cache')
-          const dl = require('download.js')
-          await dl({github, context, core, tc})
+      working-directory: '${{ github.action_path }}'
+    - run: node main.js
+      shell: bash
+      working-directory: '${{ github.action_path }}'

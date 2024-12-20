@@ -1,4 +1,8 @@
-module.exports = async ({github, _, core, tc}) => {
+const core = require('@actions/core')
+const github = require('@actions/github')
+const tc = require('@actions/tool-cache')
+
+module.exports = async () => {
   let version = process.env.INPUT_VERSION
   const path = require('path')
   const os = process.env.RUNNER_OS === "macOS" || process.env.RUNNER_OS.toLowerCase()
