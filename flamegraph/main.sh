@@ -14,8 +14,9 @@ BASE_INPUT_PROF=$(echo -n "${BASE_INPUT_PROF}" | jq -sRr @uri) # to url-encoded
 
 curl_cmd="curl -s --data-binary \"@${INPUT_PROF}\" \"https://flamegraph.com/?name=${INPUT_NAME}&file_name=${BASE_INPUT_PROF}\""
 printDebug "${curl_cmd}"
+
 upload="$(eval "${curl_cmd}")"
-printDebug "$(jq -r '.' <<< "${upload}")"
+printDebug "${upload}"
 
 flamegraph_key=$(jq -r '.key | walk(if . == null then "" else . end)' <<< "${upload}")
 flamegraph_url=$(jq -r '.url | walk(if . == null then "" else . end)' <<< "${upload}")
