@@ -8,6 +8,7 @@ curl -fsSL "${INPUT_FILE}" > "${TEMP_FILE}"
     exit 1
 }
 
+shopt -s expand_aliases
 source "${TEMP_FILE}"
 rm -rf "${TEMP_FILE}"
 
