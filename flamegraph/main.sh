@@ -7,10 +7,10 @@ source <(curl -fsSL "https://github.com/projectdiscovery/actions/raw/refs/heads/
 cmdMustExists "curl"
 cmdMustExists "jq"
 
-INPUT_NAME=$(echo -n "${INPUT_NAME}" | jq -sRr @uri) # to url-encoded
+INPUT_NAME=$(toURLEncoded "${INPUT_NAME}")
 INPUT_PROF=$(eval realpath "${INPUT_PROF}")
 BASE_INPUT_PROF=$(basename "${INPUT_PROF}")
-BASE_INPUT_PROF=$(echo -n "${BASE_INPUT_PROF}" | jq -sRr @uri) # to url-encoded
+BASE_INPUT_PROF=$(toURLEncoded "${BASE_INPUT_PROF}")
 
 curl_cmd="curl -s --data-binary \"@${INPUT_PROF}\" \"https://flamegraph.com/?name=${INPUT_NAME}&file_name=${BASE_INPUT_PROF}\""
 printDebug "${curl_cmd}"
