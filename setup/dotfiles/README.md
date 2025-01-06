@@ -6,7 +6,7 @@ Setup Dotfiles
 
 | name | description | required | default |
 | --- | --- | --- | --- |
-| `source` | <p>File to source</p> | `true` | `https://github.com/projectdiscovery/actions/raw/refs/heads/dotfiles/.bash_aliases` |
+| `file` | <p>File to source (remote URL)</p> | `true` | `https://github.com/projectdiscovery/actions/raw/refs/heads/dotfiles/.bash_aliases` |
 
 
 ## Runs
@@ -18,8 +18,8 @@ This action is a `composite` action.
 ```yaml
 - uses: projectdiscovery/actions/setup/dotfiles@v1
   with:
-    source:
-    # File to source
+    file:
+    # File to source (remote URL)
     #
     # Required: true
     # Default: https://github.com/projectdiscovery/actions/raw/refs/heads/dotfiles/.bash_aliases
