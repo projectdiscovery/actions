@@ -16,6 +16,20 @@ Add a workflow test for each new action to ensure quality and reliability and ma
 
 When creating release tags, follow the SemVer format (`vX.Y.Z`).
 
+```mermaid
+flowchart TB
+    feat["Feature/patch branch"]
+    master
+    major["Major version branch"]
+    incremented@{label: "Incremented branch\n(e.g. vX.Y.1, vX.1.Z)"}
+    tag@{ shape: tag-rect, label: "Release tag\n(e.g. vX.Y.1, vX.1.Z)" }
+
+    feat -->|merge| incremented
+    incremented -->|tested & stable| major
+    major <--o|rebase| master
+    master --> tag
+```
+
 > [!NOTE]
 > All changes must be applied to the default HEAD branch as well as the respective major version branch.
 
