@@ -46,3 +46,7 @@ function toURLEncoded() {
     cmdMustExists "jq"
     echo -n "${1}" | jq -sRr @uri
 }
+
+function toSlug() {
+    echo -n "${1}" | tr -c '[:alnum:]' '-' | tr '[:upper:]' '[:lower:]' | sed 's/^-*//;s/-*$//;s/-\\+/-/g'
+}
