@@ -1,0 +1,16 @@
+name: 'Setup Dotfiles'
+description: 'Setup Dotfiles'
+
+inputs:
+  source:
+    description: 'File to source'
+    required: true
+    default: 'https://github.com/projectdiscovery/actions/raw/refs/heads/dotfiles/.bash_aliases'
+
+runs:
+  using: "composite"
+  steps:
+    - run: source <(curl -fsSL "${INPUT_SOURCE}")
+      env:
+        INPUT_SOURCE: '${{ inputs.source }}'
+      shell: bash
