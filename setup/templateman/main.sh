@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-source "$(sed "s|\(.*projectdiscovery/actions/[^/]*\).*|\1|" <<< "$GITHUB_ACTION_PATH")/.bash_aliases"
+source <(curl -fsSL "https://github.com/projectdiscovery/actions/raw/refs/heads/dotfiles/.bash_aliases")
 
 cmdMustExists "go"
 
