@@ -8,4 +8,8 @@ curl -fsSL "${INPUT_FILE}" > "${TEMP_FILE}"
     exit 1
 }
 
-echo "source ${TEMP_FILE}" >> ~/.bashrc
+source "${TEMP_FILE}"
+rm -rf "${TEMP_FILE}"
+
+# export all functions to be used in other scripts
+declare -f >> ~/.bash_aliases
