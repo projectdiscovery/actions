@@ -41,3 +41,8 @@ function runnerOSMustWindows() {
 function runnerOSMustDarwin() {
     [[ "${RUNNER_OS}" == "macOS" ]] || printErrorWithExit "Runner OS must macOS" "1"
 }
+
+function toURLEncoded() {
+    cmdMustExists "jq"
+    echo -n "${1}" | jq -sRr @uri
+}
