@@ -10,7 +10,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: source <(curl -fsSL "${INPUT_FILE}")
+    - run: $GITHUB_ACTION_PATH/setup.sh
       env:
         INPUT_FILE: '${{ inputs.file }}'
       shell: bash
