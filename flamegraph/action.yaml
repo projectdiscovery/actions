@@ -24,7 +24,7 @@ runs:
   using: "composite"
   steps:
     - run: $GITHUB_ACTION_PATH/main.sh
-      name: flamegraph
+      id: flamegraph
       env:
         INPUT_PROF: '${{ inputs.profile }}'
         INPUT_NAME: '${{ inputs.name }}'
