@@ -7,7 +7,7 @@ Upload a CPU profile to get a publicly sharable link
 | name | description | required | default |
 | --- | --- | --- | --- |
 | `profile` | <p>Path to profile file</p> | `true` | `""` |
-| `name` | <p>Profile name</p> | `false` | `""` |
+| `name` | <p>Profile name</p> | `false` | `profile` |
 
 
 ## Outputs
@@ -38,7 +38,7 @@ This action is a `composite` action.
     # Profile name
     #
     # Required: false
-    # Default: ""
+    # Default: profile
 ```
 
 
