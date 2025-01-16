@@ -7,6 +7,7 @@ inputs:
     required: true
   name:
     description: 'Profile name'
+    default: 'profile'
     required: false
 
 outputs:
