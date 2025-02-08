@@ -1,52 +1,52 @@
 # Usage:
 # `source <(curl -fsSL "https://github.com/projectdiscovery/actions/raw/refs/heads/dotfiles/.bash_aliases")`
 
-function printDebug() {
+printDebug() {
     echo "::debug::${1}"
 }
 
-function printNotice() {
+printNotice() {
     echo "::notice::${1}"
 }
 
-function printWarning() {
+printWarning() {
     echo "::warning::${1}"
 }
 
-function printError() {
+printError() {
     echo "::error::${1}"
 }
 
-function printErrorWithExit() {
+printErrorWithExit() {
     printError "${1}"
     exit "${2}"
 }
 
-function cmdMustExists() {
+cmdMustExists() {
     which $1 >/dev/null || printErrorWithExit "Could not find $1" "1"
 }
 
-function fileMustExists() {
+fileMustExists() {
     test ! -e "$1" && printErrorWithExit "Could not find file $1" "1" || true
 }
 
-function runnerOSMustLinux() {
+runnerOSMustLinux() {
     [[ "${RUNNER_OS}" == "Linux" ]] || printErrorWithExit "Runner OS must Linux" "1"
 }
 
-function runnerOSMustWindows() {
+runnerOSMustWindows() {
     [[ "${RUNNER_OS}" == "Windows" ]] || printErrorWithExit "Runner OS must Windows" "1"
 }
 
-function runnerOSMustDarwin() {
+runnerOSMustDarwin() {
     [[ "${RUNNER_OS}" == "macOS" ]] || printErrorWithExit "Runner OS must macOS" "1"
 }
 
-function toURLEncoded() {
+toURLEncoded() {
     cmdMustExists "jq"
     echo -n "${1}" | jq -sRr @uri
 }
 
-function toSlug() {
+toSlug() {
     echo -n "${1}" | tr -c '[:alnum:]' '-' | tr '[:upper:]' '[:lower:]' | sed 's/^-*//;s/-*$//;s/-\\+/-/g'
 }
