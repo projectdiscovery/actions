@@ -1,0 +1,27 @@
+name: 'Compatibility Checks'
+description: 'Run compatibility checks for Go projects'
+
+inputs:
+  release-test:
+    description: 'Run release test (with goreleaser)'
+    required: false
+    default: 'false'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: projectdiscovery/actions/setup/git@v1
+    - uses: projectdiscovery/actions/setup/go@v1
+    - run: go mod download && go mod verify && go vet ./...
+      shell: bash
+    - name: Checks go.mod Integrity
+      run: |
+        git diff --exit-code go.mod >/dev/null || {
+          echo "::warning::go.mod is out of sync. Pushing changes to the branch."
+          git add go.{mod,sum}
+          git commit -m "chore(deps): go mod tidy"
+          git push origin $GITHUB_REF
+        }
+      shell: bash
+    - uses: projectdiscovery/actions/goreleaser@v1
+      if: ${{ inputs.release-test == 'true' }}
