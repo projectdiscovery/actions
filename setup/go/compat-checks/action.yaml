@@ -2,6 +2,14 @@ name: 'Compatibility Checks'
 description: 'Run compatibility checks for Go projects'
 
 inputs:
+  go-version:
+    description: 'Setup with specific version'
+    required: false
+    default: ''
+  go-version-file:
+    description: 'Path to go version file'
+    required: false
+    default: ''
   release-test:
     description: 'Run release test (with goreleaser)'
     required: false
@@ -11,7 +19,10 @@ runs:
   using: "composite"
   steps:
     - uses: projectdiscovery/actions/setup/git@v1
-    - uses: projectdiscovery/actions/setup/go@v1
+    - uses: projectdiscovery/actions/setup/go@master
+      with:
+        go-version: '${{ inputs.go-version }}'
+        go-version-file: '${{ inputs.go-version-file }}'
     - run: go mod download && go mod verify && go vet ./...
       shell: bash
     - name: Checks go.mod Integrity
