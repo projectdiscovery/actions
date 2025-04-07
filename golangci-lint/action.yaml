@@ -16,6 +16,6 @@ runs:
           ~/.cache/golangci-lint
         key: golangci-lint_${{ runner.os }}
         restore-keys: golangci-lint_
-    - uses: golangci/golangci-lint-action@v6
+    - uses: golangci/golangci-lint-action@v7
       with:
         args: ${{ inputs.args }}
