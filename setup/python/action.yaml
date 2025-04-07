@@ -1,0 +1,16 @@
+name: 'Setup Python'
+description: 'Run actions/setup-python'
+
+inputs:
+  python-version:
+    description: 'Setup with specific version'
+    required: false
+    default: '3.10'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '${{ inputs.python-version }}'
+        cache: 'pip'
