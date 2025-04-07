@@ -12,5 +12,5 @@ runs:
   steps:
     - uses: actions/setup-python@v5
       with:
+        check-latest: true
         python-version: '${{ inputs.python-version }}'
-        cache: 'pip'
