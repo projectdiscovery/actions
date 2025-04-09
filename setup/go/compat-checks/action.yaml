@@ -9,7 +9,7 @@ inputs:
   go-version-file:
     description: 'Path to go version file'
     required: false
-    default: ''
+    default: 'go.mod'
   release-test:
     description: 'Run release test (with goreleaser)'
     required: false
@@ -22,7 +22,7 @@ runs:
     - uses: projectdiscovery/actions/setup/go@v1
       with:
         go-version: '${{ inputs.go-version }}'
-        go-version-file: '${{ inputs.go-version-file }}'
+        go-version-file: ${{ inputs.go-version == '' && inputs.go-version-file || '' }}
     - run: go mod download && go mod verify && go vet ./...
       shell: bash
     - name: Checks go.mod Integrity
