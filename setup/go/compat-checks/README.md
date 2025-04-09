@@ -7,7 +7,7 @@ Run compatibility checks for Go projects
 | name | description | required | default |
 | --- | --- | --- | --- |
 | `go-version` | <p>Setup with specific version</p> | `false` | `""` |
-| `go-version-file` | <p>Path to go version file</p> | `false` | `""` |
+| `go-version-file` | <p>Path to go version file</p> | `false` | `go.mod` |
 | `release-test` | <p>Run release test (with goreleaser)</p> | `false` | `false` |
 
 
@@ -30,7 +30,7 @@ This action is a `composite` action.
     # Path to go version file
     #
     # Required: false
-    # Default: ""
+    # Default: go.mod
 
     release-test:
     # Run release test (with goreleaser)
