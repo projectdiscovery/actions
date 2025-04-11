@@ -40,9 +40,12 @@ runs:
       run: |
         git diff --exit-code go.mod >/dev/null || {
           echo "::warning::go.mod is out of sync. Pushing changes to the branch."
+          git fetch origin ${{ github.head_ref }}
+          git branch -f ${{ github.head_ref }} origin/${{ github.head_ref }}
+          git checkout ${{ github.head_ref }}
           git add go.{mod,sum}
           git commit -m "chore(deps): go mod tidy"
-          git push origin $GITHUB_REF
+          git push origin ${{ github.head_ref }}
         }
       working-directory: ${{ steps.get-basedir.outputs.basedir }}
       shell: bash
