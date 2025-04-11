@@ -23,7 +23,18 @@ runs:
       with:
         go-version: '${{ inputs.go-version }}'
         go-version-file: ${{ inputs.go-version == '' && inputs.go-version-file || '' }}
+    - name: Get base directory
+      id: get-basedir
+      run: |
+        if [ -f "${{ inputs.go-version-file }}" ]; then
+          WORKING_DIR=$(dirname "${{ inputs.go-version-file }}")
+        else
+          WORKING_DIR="$GITHUB_WORKSPACE"
+        fi
+        echo "basedir=${WORKING_DIR}" >> $GITHUB_OUTPUT
+      shell: bash
     - run: go mod download && go mod verify && go vet ./...
+      working-directory: ${{ steps.get-basedir.outputs.basedir }}
       shell: bash
     - name: Checks go.mod Integrity
       run: |
@@ -33,6 +44,9 @@ runs:
           git commit -m "chore(deps): go mod tidy"
           git push origin $GITHUB_REF
         }
+      working-directory: ${{ steps.get-basedir.outputs.basedir }}
       shell: bash
     - uses: projectdiscovery/actions/goreleaser@v1
       if: ${{ inputs.release-test == 'true' }}
+      with:
+        workdir: ${{ steps.get-basedir.outputs.basedir }}
