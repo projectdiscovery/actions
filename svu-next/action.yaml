@@ -1,0 +1,66 @@
+name: 'SVU Next'
+description: "Run caarlos0/svu - next version based on git history"
+
+inputs:
+  token:
+    description: 'GitHub Token'
+    required: true
+    default: '${{ github.token }}'
+  always:
+    description: 'if no commits trigger a version change, increment the patch'
+    default: 'false'
+  log-directory:
+    description: 'only use commits that changed files in the given directories'
+  metadata:
+    description: 'sets the version metadata'
+  prerelease:
+    description: 'sets the version prerelease'
+  tag-mode:
+    description: 'determine if it should look for tags in all branches, or just the current one'
+    default: 'all'
+  tag-pattern:
+    description: 'ignore tags that do not match the given pattern'
+  tag-prefix:
+    description: 'sets a tag custom prefix'
+    default: 'v'
+  v0:
+    description: 'prevent major version increments if current version is still v0'
+
+outputs:
+  tag:
+    description: 'The new created and pushed tag'
+    value: '${{ steps.svu.outputs.tag }}'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: latest
+    - uses: projectdiscovery/actions/setup/go@v1
+      with:
+        go-version: stable
+    - run: go install github.com/caarlos0/svu/v3@v3.2.3
+      shell: bash
+      working-directory: '${{ github.action_path }}'
+    - run: bun i
+      shell: bash
+      working-directory: '${{ github.action_path }}'
+    - run: echo "CURRENT_TAG=$(git describe --tags)" >> "$GITHUB_OUTPUT"
+      shell: bash
+      id: svu
+    - run: bun main.js
+      env:
+        INPUT_TOKEN: '${{ inputs.token }}'
+        INPUT_ALWAYS: '${{ inputs.always }}'
+        INPUT_LOG_DIRECTORY: '${{ inputs.log-directory }}'
+        INPUT_METADATA: '${{ inputs.metadata }}'
+        INPUT_PRERELEASE: '${{ inputs.prerelease }}'
+        INPUT_TAG_MODE: '${{ inputs.tag-mode }}'
+        INPUT_TAG_PATTERN: '${{ inputs.tag-pattern }}'
+        INPUT_TAG_PREFIX: '${{ inputs.tag-prefix }}'
+        INPUT_V0: '${{ inputs.v0 }}'
+        GITHUB_CONTEXT: '${{ toJson(github) }}'
+        CURRENT_TAG: '${{ steps.svu.outputs.tag }}'
+      shell: bash
+      working-directory: '${{ github.action_path }}'

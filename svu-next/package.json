@@ -1,0 +1,17 @@
+{
+  "name": "@projectdiscovery/actions/svu-next",
+  "main": "main.js",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^6.0.0",
+    "@types/node": "^22.14.1"
+  }
+}
