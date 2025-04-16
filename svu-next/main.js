@@ -1,8 +1,6 @@
 const core = require('@actions/core')
 const exec = require('@actions/exec')
 const github = require('@actions/github')
-const { listen } = require('bun')
-const { cwd } = require('process')
 const context = JSON.parse(process.env.GITHUB_CONTEXT)
 const currentTag = process.env.CURRENT_TAG.trim()
 const token = process.env.INPUT_TOKEN
@@ -16,6 +14,12 @@ const tagPrefix = process.env.INPUT_TAG_PREFIX
 const v0 = (process.env.INPUT_V0 === 'true')
 
 async function main() {
+  if (currentTag === '') {
+    core.info('No current tag found, skipping...')
+    core.setOutput('tag', '')
+    return
+  }
+
   core.debug("Setting up Octokit...")
   const octokit = github.getOctokit(token)
 
@@ -52,12 +56,11 @@ async function main() {
 
   core.info(`Creating and pushing tag ${nextVersion}...`)
   const [owner, repo] = context.repository.split('/')
-  const tagMessage = `Version ${nextVersion}`
   const tag = await octokit.rest.git.createTag({
     owner: owner,
     repo: repo,
     tag: nextVersion,
-    message: tagMessage,
+    message: 'Automatically tagged using projectdiscovery/actions/svu-next action',
     object: context.sha,
     type: 'commit',
     tagger: {
