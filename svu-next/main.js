@@ -1,6 +1,7 @@
 const core = require('@actions/core')
 const exec = require('@actions/exec')
 const github = require('@actions/github')
+const { cwd } = require('process')
 const context = JSON.parse(process.env.GITHUB_CONTEXT)
 const currentTag = process.env.CURRENT_TAG.trim()
 const token = process.env.INPUT_TOKEN
@@ -21,6 +22,7 @@ async function main() {
   let nextVersionErr = ''
   const nextVersionOptions = {}
   nextVersionOptions.listeners = {
+    cwd: process.env.GITHUB_WORKSPACE,
     stdout: (data) => nextVersion += data.toString(),
     stderr: (data) => nextVersionErr += data.toString()
   }
