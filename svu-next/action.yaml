@@ -46,9 +46,9 @@ runs:
     - run: bun i
       shell: bash
       working-directory: '${{ github.action_path }}'
-    - run: echo "CURRENT_TAG=$(git describe --tags)" >> "$GITHUB_OUTPUT"
+    - run: echo "tag=$(git describe --tags)" >> "$GITHUB_OUTPUT"
       shell: bash
-      id: svu
+      id: tag
     - run: bun main.js
       env:
         INPUT_TOKEN: '${{ inputs.token }}'
@@ -61,6 +61,6 @@ runs:
         INPUT_TAG_PREFIX: '${{ inputs.tag-prefix }}'
         INPUT_V0: '${{ inputs.v0 }}'
         GITHUB_CONTEXT: '${{ toJson(github) }}'
-        CURRENT_TAG: '${{ steps.svu.outputs.tag }}'
+        CURRENT_TAG: '${{ steps.tag.outputs.tag }}'
       shell: bash
       working-directory: '${{ github.action_path }}'
