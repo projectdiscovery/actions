@@ -14,6 +14,7 @@ updates:
       - "/flamegraph"
       - "/commit"
       - "/golangci-lint"
+      - "/svu-next"
       - "/templates/sync"
       - "/templates/stats"
       - "/goreleaser"
@@ -35,6 +36,7 @@ updates:
 
   - package-ecosystem: "npm"
     directories: # find . -name package.json -not -path "*/node_modules/*" -exec bash -c 'dirname "${1##.}"' bash {} \;
+      - "/svu-next"
       - "/setup/nuclei"
     schedule:
       interval: "weekly"
