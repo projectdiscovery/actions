@@ -13,7 +13,7 @@ const tagPattern = process.env.INPUT_TAG_PATTERN
 const tagPrefix = process.env.INPUT_TAG_PREFIX
 const v0 = (process.env.INPUT_V0 === 'true')
 
-try {
+async function main() {
   core.debug("Setting up Octokit...")
   const octokit = github.getOctokit(token)
 
@@ -77,7 +77,9 @@ try {
 
   core.info(`Tag ${nextVersion} created and pushed successfully.`)
   core.setOutput('tag', nextVersion)
-} catch (error) {
+}
+
+main().catch((error) => {
   core.setFailed(error.message)
   process.exit(1)
-}
+})
