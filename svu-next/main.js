@@ -1,6 +1,7 @@
 const core = require('@actions/core')
 const exec = require('@actions/exec')
 const github = require('@actions/github')
+const { listen } = require('bun')
 const { cwd } = require('process')
 const context = JSON.parse(process.env.GITHUB_CONTEXT)
 const currentTag = process.env.CURRENT_TAG.trim()
@@ -20,11 +21,12 @@ async function main() {
 
   let nextVersion = ''
   let nextVersionErr = ''
-  const nextVersionOptions = {}
-  nextVersionOptions.listeners = {
+  const nextVersionOptions = {
     cwd: process.env.GITHUB_WORKSPACE,
-    stdout: (data) => nextVersion += data.toString(),
-    stderr: (data) => nextVersionErr += data.toString()
+    listeners: {
+      stdout: (data) => nextVersion += data.toString(),
+      stderr: (data) => nextVersionErr += data.toString()
+    }
   }
   await exec.exec('svu', [
     'next',
