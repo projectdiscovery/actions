@@ -40,6 +40,14 @@ runs:
     - uses: projectdiscovery/actions/setup/go@v1
       with:
         go-version: stable
+    - uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: go-svu-next_${{ runner.os }}
+        restore-keys: |
+          go-svu-next_
     - run: go install github.com/caarlos0/svu/v3@v3.2.3
       shell: bash
       working-directory: '${{ github.action_path }}'
