@@ -5,7 +5,7 @@ inputs:
   args:
     description: 'Run with arguments'
     required: false
-    default: '--timeout=5m'
+    default: '--timeout=30m'
 
 runs:
   using: "composite"
