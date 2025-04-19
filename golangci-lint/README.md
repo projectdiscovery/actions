@@ -6,7 +6,7 @@ Run GolangCI Lint
 
 | name | description | required | default |
 | --- | --- | --- | --- |
-| `args` | <p>Run with arguments</p> | `false` | `--timeout=5m` |
+| `args` | <p>Run with arguments</p> | `false` | `--timeout=30m` |
 
 
 ## Runs
@@ -22,7 +22,7 @@ This action is a `composite` action.
     # Run with arguments
     #
     # Required: false
-    # Default: --timeout=5m
+    # Default: --timeout=30m
 ```
 
 
