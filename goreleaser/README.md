@@ -8,6 +8,7 @@ Run GoReleaser
 | --- | --- | --- | --- |
 | `release` | <p>Run without snapshot</p> | `false` | `false` |
 | `workdir` | <p>Working directory</p> | `false` | `.` |
+| `args` | <p>Run with arguments</p> | `false` | `""` |
 
 
 ## Runs
@@ -30,6 +31,12 @@ This action is a `composite` action.
     #
     # Required: false
     # Default: .
+
+    args:
+    # Run with arguments
+    #
+    # Required: false
+    # Default: ""
 ```
 
 
