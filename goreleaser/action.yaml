@@ -10,6 +10,10 @@ inputs:
     description: 'Working directory'
     required: false
     default: '.'
+  args:
+    description: 'Run with arguments'
+    required: false
+    default: ''
 
 runs:
   using: "composite"
@@ -19,5 +23,5 @@ runs:
     - uses: goreleaser/goreleaser-action@v6
       with:
         version: 'latest'
-        args: release --clean ${{ inputs.release != 'true' && '--snapshot' || '' }}
+        args: release --clean ${{ inputs.release != 'true' && '--snapshot' || '' }} ${{ inputs.args }}
         workdir: '${{ inputs.workdir }}'
