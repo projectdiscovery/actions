@@ -6,7 +6,7 @@ Run GolangCI Lint
 
 | name | description | required | default |
 | --- | --- | --- | --- |
-| `version` | <p>GolangCI Lint version</p> | `false` | `latest` |
+| `version` | <p>GolangCI Lint version</p> | `false` | `v1.64.8` |
 | `args` | <p>Run with arguments</p> | `false` | `--timeout=30m` |
 
 
@@ -23,7 +23,7 @@ This action is a `composite` action.
     # GolangCI Lint version
     #
     # Required: false
-    # Default: latest
+    # Default: v1.64.8
 
     args:
     # Run with arguments
