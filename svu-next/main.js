@@ -50,7 +50,7 @@ async function main() {
 
   if (nextVersion === currentTag) {
     core.info(`Current tag is already ${nextVersion}, skipping...`)
-    core.setOutput('tag', currentTag)
+    core.setOutput('tag', '')
     return
   }
 
