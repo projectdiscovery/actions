@@ -15,11 +15,7 @@ const v0 = (process.env.INPUT_V0 === 'true')
 const setFailed = (process.env.INPUT_SET_FAILED === 'true')
 
 async function main() {
-  if (currentTag === '') {
-    core.info('No current tag found, skipping...')
-    core.setOutput('tag', '')
-    return
-  }
+  if (currentTag === '') throw new Error('No current tag found.')
 
   core.debug("Setting up Octokit...")
   const octokit = github.getOctokit(token)
