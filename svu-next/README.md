@@ -15,6 +15,7 @@ Run caarlos0/svu - next version based on git history
 | `tag-pattern` | <p>ignore tags that do not match the given pattern</p> | `false` | `""` |
 | `tag-prefix` | <p>sets a tag custom prefix</p> | `false` | `v` |
 | `v0` | <p>prevent major version increments if current version is still v0</p> | `false` | `""` |
+| `set-failed` | <p>set failed if create a new tag fails</p> | `false` | `false` |
 
 
 ## Outputs
@@ -86,6 +87,12 @@ This action is a `composite` action.
     #
     # Required: false
     # Default: ""
+
+    set-failed:
+    # set failed if create a new tag fails
+    #
+    # Required: false
+    # Default: false
 ```
 
 
