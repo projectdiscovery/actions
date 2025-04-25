@@ -5,7 +5,7 @@ inputs:
   version:
     description: 'GolangCI Lint version'
     required: false
-    default: 'v1.64.8'
+    default: 'latest'
   args:
     description: 'Run with arguments'
     required: false
@@ -20,7 +20,7 @@ runs:
           ~/.cache/golangci-lint
         key: golangci-lint_${{ runner.os }}
         restore-keys: golangci-lint_
-    - uses: golangci/golangci-lint-action@v7
+    - uses: golangci/golangci-lint-action@v6
       with:
         version: ${{ inputs.version }}
         args: ${{ inputs.args }}
