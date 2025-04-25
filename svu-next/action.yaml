@@ -25,6 +25,9 @@ inputs:
     default: 'v'
   v0:
     description: 'prevent major version increments if current version is still v0'
+  set-failed:
+    description: 'set failed if create a new tag fails'
+    default: 'false'
 
 outputs:
   tag:
@@ -69,6 +72,7 @@ runs:
         INPUT_TAG_PATTERN: '${{ inputs.tag-pattern }}'
         INPUT_TAG_PREFIX: '${{ inputs.tag-prefix }}'
         INPUT_V0: '${{ inputs.v0 }}'
+        INPUT_SET_FAILED: '${{ inputs.set-failed }}'
         GITHUB_CONTEXT: '${{ toJson(github) }}'
         CURRENT_TAG: '${{ steps.tag.outputs.tag }}'
       shell: bash

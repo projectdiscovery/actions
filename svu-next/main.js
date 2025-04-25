@@ -12,6 +12,7 @@ const tagMode = process.env.INPUT_TAG_MODE
 const tagPattern = process.env.INPUT_TAG_PATTERN
 const tagPrefix = process.env.INPUT_TAG_PREFIX
 const v0 = (process.env.INPUT_V0 === 'true')
+const setFailed = (process.env.INPUT_SET_FAILED === 'true')
 
 async function main() {
   if (currentTag === '') {
@@ -49,9 +50,7 @@ async function main() {
   core.info(`next version tag: ${nextVersion}`)
 
   if (nextVersion === currentTag) {
-    core.info(`Current tag is already ${nextVersion}, skipping...`)
-    core.setOutput('tag', '')
-    return
+    throw new Error(`Current tag is already ${nextVersion}, skipping.`)
   }
 
   core.info(`Creating and pushing tag ${nextVersion}...`)
@@ -81,6 +80,10 @@ async function main() {
 }
 
 main().catch((error) => {
-  core.setFailed(error.message)
-  process.exit(1)
+  if (setFailed) {
+    core.setFailed(error.message)
+  }
+  else {
+    core.warning(error.message)
+  }
 })
