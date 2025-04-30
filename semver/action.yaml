@@ -4,6 +4,9 @@ description: 'Parse semantic versioning strings'
 inputs:
   tag:
     description: 'Tag to parse (defaults to latest tag)'
+  allow-no-tags:
+    description: 'If true and no tags are found, fallback to version 0.0.0'
+    default: 'false'
 
 outputs:
   major:
@@ -29,4 +32,5 @@ runs:
       id: parse
       env:
         INPUT_TAG: '${{ inputs.tag }}'
+        INPUT_ALLOW_NO_TAGS: '${{ inputs.allow-no-tags }}'
       shell: bash
