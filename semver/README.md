@@ -7,6 +7,7 @@ Parse semantic versioning strings
 | name | description | required | default |
 | --- | --- | --- | --- |
 | `tag` | <p>Tag to parse (defaults to latest tag)</p> | `false` | `""` |
+| `allow-no-tags` | <p>If true and no tags are found, fallback to version 0.0.0</p> | `false` | `false` |
 
 
 ## Outputs
@@ -34,6 +35,12 @@ This action is a `composite` action.
     #
     # Required: false
     # Default: ""
+
+    allow-no-tags:
+    # If true and no tags are found, fallback to version 0.0.0
+    #
+    # Required: false
+    # Default: false
 ```
 
 
