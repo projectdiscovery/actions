@@ -6,7 +6,7 @@ ProjectDiscovery's composite actions.
 
 * default HEAD branch (**`master`**) - latest code changes and updates, which *might* not have undergone thorough testing and quality assurance; **use at your own risk**.
 * Major version branch (e.g. **`vN`**) - contains stable releases; **considered production-ready**.
-* **`dotfiles`** branch - contains configuration files for setting up development environments used across actions. This branch is **NOT** subject to frequent changes; **modify with caution**.
+* **`dotfiles`** branch - contains configuration files for setting up development environments used across actions. This branch is **NOT** subject to frequent changes; **modify with caution** _(require signed commits)_.
 
 ## Development
 
