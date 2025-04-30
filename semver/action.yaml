@@ -1,0 +1,32 @@
+name: 'SemVer Parser'
+description: 'Parse semantic versioning strings'
+
+inputs:
+  tag:
+    description: 'Tag to parse (defaults to latest tag)'
+
+outputs:
+  major:
+    description: 'Major version'
+    value: '${{ steps.parse.outputs.major }}'
+  minor:
+    description: 'Minor version'
+    value: '${{ steps.parse.outputs.minor }}'
+  patch:
+    description: 'Patch version'
+    value: '${{ steps.parse.outputs.patch }}'
+  special:
+    description: 'Special version'
+    value: '${{ steps.parse.outputs.special }}'
+  version:
+    description: 'Full version (without prefix and excluding special version)'
+    value: '${{ steps.parse.outputs.version }}'
+
+runs:
+  using: "composite"
+  steps:
+    - run: $GITHUB_ACTION_PATH/main.sh
+      id: parse
+      env:
+        INPUT_TAG: '${{ inputs.tag }}'
+      shell: bash
