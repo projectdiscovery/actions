@@ -7,7 +7,7 @@ Install Nuclei engine
 | name | description | required | default |
 | --- | --- | --- | --- |
 | `version` | <p>Setup with specific version ("latest" or in format "vX.Y.Z")</p> | `true` | `latest` |
-| `token` | <p>GitHub Token</p> | `true` | `""` |
+| `token` | <p>GitHub Token</p> | `true` | `${{ github.token }}` |
 
 
 ## Runs
@@ -29,7 +29,7 @@ This action is a `composite` action.
     # GitHub Token
     #
     # Required: true
-    # Default: ""
+    # Default: ${{ github.token }}
 ```
 
 
