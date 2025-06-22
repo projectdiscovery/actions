@@ -18,11 +18,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up QEMU on Linux
-      if: runner.os == 'Linux'
+    - if: runner.os == 'Linux'
       uses: docker/setup-qemu-action@v3
-    - name: Set up Buildx on Linux
-      if: runner.os == 'Linux'
+    - if: runner.os == 'Linux'
       uses: docker/setup-buildx-action@v3
     - uses: goreleaser/goreleaser-action@v6
       with:
