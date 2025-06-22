@@ -6,7 +6,7 @@ Early nuclei templates synchronize
 
 | name | description | required | default |
 | --- | --- | --- | --- |
-| `token` | <p>GitHub Token</p> | `true` | `""` |
+| `token` | <p>GitHub Token</p> | `true` | `{{ github.token }}` |
 
 
 ## Runs
@@ -22,7 +22,7 @@ This action is a `composite` action.
     # GitHub Token
     #
     # Required: true
-    # Default: ""
+    # Default: {{ github.token }}
 ```
 
 
