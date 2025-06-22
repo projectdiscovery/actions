@@ -12,6 +12,6 @@
     "@actions/core": "^1.11.1",
     "@actions/exec": "^1.1.1",
     "@actions/github": "^6.0.0",
-    "@types/node": "^22.14.1"
+    "@types/node": "^24.0.3"
   }
 }
