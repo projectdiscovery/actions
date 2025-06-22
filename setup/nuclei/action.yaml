@@ -9,6 +9,7 @@ inputs:
   token:
     description: 'GitHub Token'
     required: true
+    default: '${{ github.token }}'
 
 runs:
   using: "composite"
