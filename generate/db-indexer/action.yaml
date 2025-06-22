@@ -5,7 +5,7 @@ inputs:
   token:
     description: 'GitHub Token'
     required: true
-    default: ''
+    default: '{{ github.token }}'
   version:
     description: 'Setup with specific version'
     required: false
