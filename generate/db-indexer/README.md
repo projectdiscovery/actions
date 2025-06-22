@@ -6,7 +6,7 @@ Generate Nuclei Templates Database Indexer
 
 | name | description | required | default |
 | --- | --- | --- | --- |
-| `token` | <p>GitHub Token</p> | `true` | `""` |
+| `token` | <p>GitHub Token</p> | `true` | `{{ github.token }}` |
 | `version` | <p>Setup with specific version</p> | `false` | `latest` |
 | `mode` | <p>Specify mode of operation (templates/changelog)</p> | `true` | `templates` |
 | `args` | <p>Specify additional arguments</p> | `false` | `""` |
@@ -26,7 +26,7 @@ This action is a `composite` action.
     # GitHub Token
     #
     # Required: true
-    # Default: ""
+    # Default: {{ github.token }}
 
     version:
     # Setup with specific version
