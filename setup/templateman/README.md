@@ -6,7 +6,7 @@ Install TemplateMan CLI
 
 | name | description | required | default |
 | --- | --- | --- | --- |
-| `token` | <p>GitHub Token</p> | `true` | `""` |
+| `token` | <p>GitHub Token</p> | `true` | `{{ github.token }}` |
 | `version` | <p>Setup with specific version</p> | `false` | `latest` |
 | `go-version` | <p>Specify Go version</p> | `false` | `stable` |
 
@@ -24,7 +24,7 @@ This action is a `composite` action.
     # GitHub Token
     #
     # Required: true
-    # Default: ""
+    # Default: {{ github.token }}
 
     version:
     # Setup with specific version
