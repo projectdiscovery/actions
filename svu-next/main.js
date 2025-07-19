@@ -15,6 +15,7 @@ const v0 = (process.env.INPUT_V0 === 'true')
 const setFailed = (process.env.INPUT_SET_FAILED === 'true')
 const releaseCreate = (process.env.INPUT_RELEASE_CREATE === 'true')
 const releaseName = process.env.INPUT_RELEASE_NAME
+const releaseDraft = (process.env.INPUT_RELEASE_DRAFT === 'true')
 const releaseMakeLatest = (process.env.INPUT_RELEASE_MAKE_LATEST === 'true')
 
 async function main() {
@@ -84,10 +85,10 @@ async function main() {
       tag_name: nextVersion,
       name: releaseName,
       body: `_Automatically released using projectdiscovery/actions/svu-next action._\n\n---\n`,
-      draft: false,
+      draft: releaseDraft,
       prerelease: (prerelease !== '' && prerelease !== undefined),
       generate_release_notes: true,
-      make_latest: releaseMakeLatest
+      make_latest: releaseMakeLatest ? 'true' : 'false'
     })
     core.info(`Release for tag ${nextVersion} created successfully.`)
   }
