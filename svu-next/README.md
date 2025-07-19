@@ -16,6 +16,10 @@ Run caarlos0/svu - next version based on git history
 | `tag-prefix` | <p>sets a tag custom prefix</p> | `false` | `v` |
 | `v0` | <p>prevent major version increments if current version is still v0</p> | `false` | `""` |
 | `set-failed` | <p>set failed if create a new tag fails</p> | `false` | `false` |
+| `release-create` | <p>create a GitHub release</p> | `false` | `false` |
+| `release-name` | <p>name of the release (if not set, automatically generated)</p> | `false` | `""` |
+| `release-draft` | <p>create the release as a draft</p> | `false` | `false` |
+| `release-make-latest` | <p>make the release the latest one</p> | `false` | `true` |
 
 
 ## Outputs
@@ -93,6 +97,30 @@ This action is a `composite` action.
     #
     # Required: false
     # Default: false
+
+    release-create:
+    # create a GitHub release
+    #
+    # Required: false
+    # Default: false
+
+    release-name:
+    # name of the release (if not set, automatically generated)
+    #
+    # Required: false
+    # Default: ""
+
+    release-draft:
+    # create the release as a draft
+    #
+    # Required: false
+    # Default: false
+
+    release-make-latest:
+    # make the release the latest one
+    #
+    # Required: false
+    # Default: true
 ```
 
 
