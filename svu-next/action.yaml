@@ -28,6 +28,17 @@ inputs:
   set-failed:
     description: 'set failed if create a new tag fails'
     default: 'false'
+  release-create:
+    description: 'create a GitHub release'
+    default: 'false'
+  release-name:
+    description: 'name of the release (if not set, automatically generated)'
+  release-draft:
+    description: 'create the release as a draft'
+    default: 'false'
+  release-make-latest:
+    description: 'make the release the latest one'
+    default: 'true'
 
 outputs:
   tag:
@@ -73,6 +84,10 @@ runs:
         INPUT_TAG_PREFIX: '${{ inputs.tag-prefix }}'
         INPUT_V0: '${{ inputs.v0 }}'
         INPUT_SET_FAILED: '${{ inputs.set-failed }}'
+        INPUT_RELEASE_CREATE: '${{ inputs.release-create }}'
+        INPUT_RELEASE_NAME: '${{ inputs.release-name }}'
+        INPUT_RELEASE_DRAFT: '${{ inputs.release-draft }}'
+        INPUT_RELEASE_MAKE_LATEST: '${{ inputs.release-make-latest }}'
         GITHUB_CONTEXT: '${{ toJson(github) }}'
         CURRENT_TAG: '${{ steps.tag.outputs.tag }}'
       shell: bash
