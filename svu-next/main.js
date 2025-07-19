@@ -13,6 +13,9 @@ const tagPattern = process.env.INPUT_TAG_PATTERN
 const tagPrefix = process.env.INPUT_TAG_PREFIX
 const v0 = (process.env.INPUT_V0 === 'true')
 const setFailed = (process.env.INPUT_SET_FAILED === 'true')
+const releaseCreate = (process.env.INPUT_RELEASE_CREATE === 'true')
+const releaseName = process.env.INPUT_RELEASE_NAME
+const releaseMakeLatest = (process.env.INPUT_RELEASE_MAKE_LATEST === 'true')
 
 async function main() {
   if (currentTag === '') throw new Error('No current tag found.')
@@ -55,7 +58,7 @@ async function main() {
     owner: owner,
     repo: repo,
     tag: nextVersion,
-    message: 'Automatically tagged using projectdiscovery/actions/svu-next action',
+    message: 'Automatically tagged using projectdiscovery/actions/svu-next action.',
     object: context.sha,
     type: 'commit',
     tagger: {
@@ -72,6 +75,23 @@ async function main() {
   })
 
   core.info(`Tag ${nextVersion} created and pushed successfully.`)
+
+  if (releaseCreate) {
+    core.info(`Creating release for tag ${nextVersion}...`)
+    await octokit.rest.repos.createRelease({
+      owner: owner,
+      repo: repo,
+      tag_name: nextVersion,
+      name: releaseName,
+      body: `_Automatically released using projectdiscovery/actions/svu-next action._\n\n---\n`,
+      draft: false,
+      prerelease: (prerelease !== '' && prerelease !== undefined),
+      generate_release_notes: true,
+      make_latest: releaseMakeLatest
+    })
+    core.info(`Release for tag ${nextVersion} created successfully.`)
+  }
+
   core.setOutput('tag', nextVersion)
 }
 
