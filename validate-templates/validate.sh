@@ -28,5 +28,5 @@ templates=$(IFS=','; echo "${resolved_templates[*]}")
 
 echo "::group::Validating templates"
 nuclei -disable-update-check -enable-self-contained -enable-global-matchers \
-    -code -file -dast -validate -templates "${templates}"
+    -headless -code -file -dast -validate -templates "${templates}"
 echo "::endgroup::"
