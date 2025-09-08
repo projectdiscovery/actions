@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
       - uses: projectdiscovery/actions/setup/git@master
       - run: npm i -g action-docs
       - run: find . -name action.yaml -exec bash .github/scripts/action-docs.sh {} \;
