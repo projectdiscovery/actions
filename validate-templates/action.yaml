@@ -1,0 +1,32 @@
+name: "Validate Nuclei templates"
+description: "Validate Nuclei templates"
+
+inputs:
+  nuclei-version:
+    description: 'Install with specific Nuclei version ("latest" or in format "vX.Y.Z")'
+    required: true
+    default: 'latest'
+  token:
+    description: 'GitHub Token'
+    required: true
+    default: '${{ github.token }}'
+  templates:
+    description: 'Path to the Nuclei templates'
+    required: true
+  separator:
+    description: 'Separator for multiple templates (default is a space)'
+    default: ' '
+
+runs:
+  using: "composite"
+  steps:
+    - uses: projectdiscovery/actions/setup/nuclei@v1
+      with:
+        version: '${{ inputs.nuclei-version }}'
+        token: '${{ inputs.token }}'
+    - run: $GITHUB_ACTION_PATH/validate.sh
+      shell: bash
+      id: validate
+      env:
+        INPUT_TEMPLATES: '${{ inputs.templates }}'
+        INPUT_SEPARATOR: '${{ inputs.separator }}'
