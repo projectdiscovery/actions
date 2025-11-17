@@ -13,6 +13,7 @@ inputs:
   templates:
     description: 'Path to the Nuclei templates'
     required: true
+    default: '~/nuclei-templates'
   separator:
     description: 'Separator for multiple templates (default is a space)'
     default: ' '
