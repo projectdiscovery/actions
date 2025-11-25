@@ -18,15 +18,15 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: insightsengineering/disk-space-reclaimer@v1
+    - uses: projectdiscovery/actions/free-disk-space@v1
       with:
-        tools-cache: false
-        android: true
-        dotnet: true
-        haskell: true
-        large-packages: true
-        swap-storage: true
-        docker-images: false
+        llvm: 'false'
+        php: 'false'
+        mongodb: 'false'
+        mysql: 'false'
+        misc-packages: 'false'
+        docker-images: 'false'
+        tools-cache: 'false'
     - if: runner.os == 'Linux'
       uses: docker/setup-qemu-action@v3
     - if: runner.os == 'Linux'
