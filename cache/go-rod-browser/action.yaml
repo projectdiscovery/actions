@@ -1,0 +1,20 @@
+name: 'Cache go-rod Browser'
+description: 'Cache the go-rod browser binaries to speed up workflows using go-rod'
+
+runs:
+  using: "composite"
+  steps:
+    - if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/rod/browser
+        key: ${{ runner.os }}-go-rod-browser
+        restore-keys: |
+          ${{ runner.os }}-go-rod-browser_
+    - if: ${{ runner.os == 'Windows' }}
+      uses: actions/cache@v4
+      with:
+        path: ~\AppData\Local\rod\browser
+        key: ${{ runner.os }}-go-rod-browser
+        restore-keys: |
+          ${{ runner.os }}-go-rod-browser_
