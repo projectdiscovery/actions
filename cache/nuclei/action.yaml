@@ -1,0 +1,22 @@
+name: 'Cache Nuclei'
+description: 'Cache Nuclei data to speed up workflows using Nuclei scanner'
+
+runs:
+  using: "composite"
+  steps:
+    - if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/nuclei
+        key: ${{ runner.os }}-nuclei
+        restore-keys: |
+          ${{ runner.os }}-nuclei_
+    - if: ${{ runner.os == 'Windows' }}
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~\AppData\Local\nuclei
+        key: ${{ runner.os }}-nuclei
+        restore-keys: |
+          ${{ runner.os }}-nuclei_
