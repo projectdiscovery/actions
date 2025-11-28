@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
+
 set -euo pipefail
 
-source <(curl -fsSL "https://github.com/projectdiscovery/actions/raw/refs/heads/dotfiles/.bash_aliases")
-
-if [[ "$RUNNER_OS" != "Linux" ]]; then
-    printErrorWithExit "This action is only supported on Linux runners. Skipping..." 0
+if [[ "${RUNNER_OS:-}" != "Linux" ]]; then
+    echo "::notice::This action is only supported on Linux runners. Skipping..."
+    exit 0
 fi
 
 if [[ "${INPUT_ANDROID}" == "true" ]]; then
