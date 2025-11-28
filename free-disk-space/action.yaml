@@ -95,8 +95,8 @@ runs:
     - if: ${{ inputs.misc-packages == 'true' }}
       run: |
         sudo apt-get remove -y \
-          azure-cli google-cloud-sdk
-          google-chrome-stable firefox
+          azure-cli google-cloud-sdk \
+          google-chrome-stable firefox \
           powershell mono-devel libgl1-mesa-dri
         sudo apt-get autoremove -y
         sudo apt-get clean
