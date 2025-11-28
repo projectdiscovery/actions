@@ -50,65 +50,17 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - if: ${{ runner.os != 'Linux' }}
-      run: |
-        echo "::error::This action is only supported on Linux runners."
-        exit 0
-      shell: bash
-    - if: ${{ inputs.android == 'true' }}
-      run: sudo rm -rf /usr/local/lib/android
-      shell: bash
-    - if: ${{ inputs.dotnet == 'true' }}
-      run: |
-        sudo rm -rf /usr/share/dotnet
-        sudo apt-get remove -y '^dotnet-.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-      shell: bash
-    - if: ${{ inputs.haskell == 'true' }}
-      run: sudo rm -rf /opt/ghc
-      shell: bash
-    - if: ${{ inputs.llvm == 'true' }}
-      run: |
-        sudo apt-get remove -y '^llvm-.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-      shell: bash
-    - if: ${{ inputs.php == 'true' }}
-      run: |
-        sudo apt-get remove -y '^php[0-9.\\-]*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-      shell: bash
-    - if: ${{ inputs.mongodb == 'true' }}
-      run: |
-        sudo apt-get remove -y '^mongodb-.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-      shell: bash
-    - if: ${{ inputs.mysql == 'true' }}
-      run: |
-        sudo apt-get remove -y '^mysql-.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-      shell: bash
-    - if: ${{ inputs.misc-packages == 'true' }}
-      run: |
-        sudo apt-get remove -y \
-          azure-cli google-cloud-sdk \
-          google-chrome-stable firefox \
-          powershell mono-devel libgl1-mesa-dri
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-      shell: bash
-    - if: ${{ inputs.docker-images == 'true' }}
-      run: sudo docker image prune -af
-      shell: bash
-    - if: ${{ inputs.tools-cache == 'true' }}
-      run: sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
-      shell: bash
-    - if: ${{ inputs.swap-storage == 'true' }}
-      run: |
-        sudo swapoff -a
-        sudo rm -f /mnt/swapfile
+    - run: $GITHUB_ACTION_PATH/main.sh
+      env:
+        INPUT_ANDROID: "${{ inputs.android }}"
+        INPUT_DOTNET: "${{ inputs.dotnet }}"
+        INPUT_HASKELL: "${{ inputs.haskell }}"
+        INPUT_LLVM: "${{ inputs.llvm }}"
+        INPUT_PHP: "${{ inputs.php }}"
+        INPUT_MONGODB: "${{ inputs.mongodb }}"
+        INPUT_MYSQL: "${{ inputs.mysql }}"
+        INPUT_MISC_PACKAGES: "${{ inputs.misc-packages }}"
+        INPUT_DOCKER_IMAGES: "${{ inputs.docker-images }}"
+        INPUT_TOOLS_CACHE: "${{ inputs.tools-cache }}"
+        INPUT_SWAP_STORAGE: "${{ inputs.swap-storage }}"
       shell: bash
