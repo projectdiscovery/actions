@@ -1,0 +1,53 @@
+name: Approve Pull Request
+description: Automatically approve a pull request.
+
+inputs:
+  token:
+    description: "GitHub token with `pull-requests: write` permission."
+    required: true
+    default: "${{ github.token }}"
+  username:
+    description: "GitHub username associated with the token."
+    required: false
+    default: "${{ github.actor }}"
+  repository:
+    description: "Repository in owner/repo format."
+    required: true
+    default: "${{ github.repository }}"
+  pr-number:
+    description: "PR number to approve. If not provided, it will be auto-detected from the event context."
+    required: false
+  approve-message:
+    description: "Message for PR approval."
+    required: false
+    default: "_Automatically approved using projectdiscovery/actions/pr/approve action._"
+
+outputs:
+  approved:
+    description: "Indicates whether the PR was approved."
+    value: ${{ steps.approve-pr.outputs.approved }}
+  pr-number:
+    description: "The PR number that was approved."
+    value: ${{ steps.approve-pr.outputs.pr-number }}
+
+runs:
+  using: composite
+  steps:
+    - uses: projectdiscovery/actions/setup/git@v1
+      with:
+        username: "${{ inputs.username }}"
+    - uses: projectdiscovery/actions/pr/get-pr-number@v1
+      id: pr
+      if: ${{ inputs.pr-number == '' }}
+      with:
+        token: "${{ inputs.token }}"
+    - name: Approve PR
+      id: approve-pr
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        INPUT_REPOSITORY: ${{ inputs.repository }}
+        INPUT_PR_NUMBER: ${{ inputs.pr-number }}
+        INPUT_APPROVE_MESSAGE: ${{ inputs.approve-message }}
+        OUTPUT_PR_NUMBER: ${{ steps.pr.outputs.number }}
+      run: $GITHUB_ACTION_PATH/approve.sh

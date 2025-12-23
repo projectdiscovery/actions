@@ -1,0 +1,69 @@
+name: Merge Pull Request
+description: Automatically merge a pull request.
+
+inputs:
+  token:
+    description: "GitHub token with `pull-requests: write` permission."
+    required: true
+    default: "${{ github.token }}"
+  username:
+    description: "GitHub username associated with the token."
+    required: false
+    default: "${{ github.actor }}"
+  repository:
+    description: "Repository in owner/repo format."
+    required: true
+    default: "${{ github.repository }}"
+  pr-number:
+    description: "PR number to merge. If not provided, it will be auto-detected from the event context."
+    required: false
+  merge-method:
+    description: "Merge method (merge, squash, rebase)."
+    required: false
+    default: squash
+  delete-branch:
+    description: "Delete branch after merge."
+    required: false
+    default: "true"
+  auto:
+    description: "Enable GitHub auto-merge (automatically merge ONLY after necessary requirements are met)."
+    required: false
+    default: "true"
+
+outputs:
+  merged:
+    description: "Indicates whether the PR was merged."
+    value: ${{ steps.merge-pr.outputs.merged }}
+  pr-number:
+    description: "The PR number that was merged."
+    value: ${{ steps.merge-pr.outputs.pr-number }}
+
+runs:
+  using: composite
+  steps:
+    - uses: projectdiscovery/actions/setup/git@v1
+      with:
+        username: "${{ inputs.username }}"
+    - uses: projectdiscovery/actions/pr/get-pr-number@v1
+      id: pr
+      if: ${{ inputs.pr-number == '' }}
+      with:
+        token: "${{ inputs.token }}"
+    - name: Validate merge-method
+      shell: bash
+      env:
+        INPUT_MERGE_METHOD: ${{ inputs.merge-method }}
+      run: $GITHUB_ACTION_PATH/validate.sh
+    - name: Merge PR
+      id: merge-pr
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        INPUT_REPOSITORY: ${{ inputs.repository }}
+        INPUT_PR_NUMBER: ${{ inputs.pr-number }}
+        INPUT_MERGE_METHOD: ${{ inputs.merge-method }}
+        INPUT_DELETE_BRANCH: ${{ inputs.delete-branch }}
+        INPUT_AUTO: ${{ inputs.auto }}
+        OUTPUT_PR_NUMBER: ${{ steps.pr.outputs.number }}
+      run: $GITHUB_ACTION_PATH/merge.sh
+    
