@@ -1,0 +1,52 @@
+name: "Get Pull Request Number"
+description: "Get the pull request number associated with the current workflow run."
+
+inputs:
+  token:
+    description: "GitHub token with `pull-requests: read` permission."
+    required: true
+    default: "${{ github.token }}"
+
+outputs:
+  number:
+    description: "The detected PR number."
+    value: ${{ steps.pr-number.outputs.result }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/github-script@v8
+      id: pr-number
+      with:
+        result-encoding: string
+        script: |
+          // auto-detect from event context
+          const { eventName, payload } = context;
+
+          // pull_request or pull_request_target events
+          if (payload.pull_request?.number) {
+            return payload.pull_request.number;
+          }
+
+          // workflow_run
+          if (payload.workflow_run?.pull_requests?.length === 1) {
+            return payload.workflow_run.pull_requests[0].number;
+          }
+
+          // check_run
+          if (payload.check_run?.pull_requests?.length === 1) {
+            return payload.check_run.pull_requests[0].number;
+          }
+
+          // check_suite
+          if (payload.check_suite?.pull_requests?.length === 1) {
+            return payload.check_suite.pull_requests[0].number;
+          }
+
+          // issue_comment on a PR
+          if (payload.issue?.pull_request && payload.issue?.number) {
+            return payload.issue.number;
+          }
+
+          core.warning(`Could not detect PR number from event: ${eventName}`);
+          return '';
