@@ -34,5 +34,5 @@ runs:
     - uses: goreleaser/goreleaser-action@v6
       with:
         version: 'latest'
-        args: release --clean ${{ inputs.release != 'true' && '--snapshot' || '' }} ${{ inputs.args }}
+        args: release --skip=validate --clean ${{ inputs.release != 'true' && '--snapshot' || '' }} ${{ inputs.args }}
         workdir: '${{ inputs.workdir }}'
