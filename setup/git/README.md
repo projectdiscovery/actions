@@ -6,7 +6,7 @@ Configure user's name & email for git
 
 | name | description | required | default |
 | --- | --- | --- | --- |
-| `scope` | <p>Scope for configured git user</p> | `true` | `local` |
+| `scope` | <p>Scope for configured git user</p> | `true` | `global` |
 | `username` | <p>GitHub username</p> | `false` | `ghost` |
 
 
@@ -30,7 +30,7 @@ This action is a `composite` action.
     # Scope for configured git user
     #
     # Required: true
-    # Default: local
+    # Default: global
 
     username:
     # GitHub username
