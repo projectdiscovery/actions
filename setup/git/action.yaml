@@ -5,7 +5,7 @@ inputs:
   scope:
     description: 'Scope for configured git user'
     required: true
-    default: 'local'
+    default: 'global'
   username:
     description: 'GitHub username'
     required: false
