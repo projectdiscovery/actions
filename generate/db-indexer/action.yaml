@@ -33,7 +33,7 @@ runs:
       env:
         TOKEN: '${{ inputs.token }}'
       shell: bash
-    - uses: actions/cache@v4
+    - uses: actions/cache@v5
       with:
         path: |
           ~/.cache/go-build
