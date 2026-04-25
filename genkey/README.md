@@ -10,6 +10,7 @@ Generate an armored GPG keypair
 | `email` | <p>Email for the generated GPG identity. Defaults to the triggering actor noreply email when empty.</p> | `false` | `""` |
 | `expire` | <p>GPG key expiration (for example 0, 30d, 12m, 1y)</p> | `false` | `0` |
 | `passphrase` | <p>Passphrase for the secret key. Leave empty to disable protection.</p> | `false` | `""` |
+| `import` | <p>If true, import the generated keypair into the local GnuPG home instead of only keeping it in the generated keyring.</p> | `false` | `false` |
 | `public-key-path` | <p>Path where the armored public key should be written. Defaults to <repository>.pub.asc when empty.</p> | `false` | `""` |
 | `private-key-path` | <p>Path where the armored private key should be written. Defaults to <repository>.priv.asc when empty.</p> | `false` | `""` |
 
@@ -20,6 +21,9 @@ Generate an armored GPG keypair
 | --- | --- |
 | `public-key-path` | <p>Path to the exported armored public key</p> |
 | `private-key-path` | <p>Path to the exported armored private key</p> |
+| `gnupg-home` | <p>Path to the GnuPG home where the generated keypair is available after the action finishes</p> |
+| `name` | <p>Resolved name used for the generated GPG identity</p> |
+| `email` | <p>Resolved email used for the generated GPG identity</p> |
 
 
 ## Runs
@@ -54,6 +58,12 @@ This action is a `composite` action.
     #
     # Required: false
     # Default: ""
+
+    import:
+    # If true, import the generated keypair into the local GnuPG home instead of only keeping it in the generated keyring.
+    #
+    # Required: false
+    # Default: false
 
     public-key-path:
     # Path where the armored public key should be written. Defaults to <repository>.pub.asc when empty.
