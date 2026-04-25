@@ -1,0 +1,49 @@
+name: 'Generate GPG keypair'
+description: 'Generate an armored GPG keypair'
+
+inputs:
+  name:
+    description: 'Name for the generated GPG identity. Defaults to the triggering actor login when empty.'
+    required: false
+  email:
+    description: 'Email for the generated GPG identity. Defaults to the triggering actor noreply email when empty.'
+    required: false
+  expire:
+    description: 'GPG key expiration (for example 0, 30d, 12m, 1y)'
+    required: false
+    default: '0'
+  passphrase:
+    description: 'Passphrase for the secret key. Leave empty to disable protection.'
+    required: false
+    default: ''
+  public-key-path:
+    description: 'Path where the armored public key should be written. Defaults to <repository>.pub.asc when empty.'
+    required: false
+    default: ''
+  private-key-path:
+    description: 'Path where the armored private key should be written. Defaults to <repository>.priv.asc when empty.'
+    required: false
+    default: ''
+
+outputs:
+  public-key-path:
+    description: 'Path to the exported armored public key'
+    value: '${{ steps.genkey.outputs.public-key-path }}'
+  private-key-path:
+    description: 'Path to the exported armored private key'
+    value: '${{ steps.genkey.outputs.private-key-path }}'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: generate keypair
+      id: genkey
+      env:
+        INPUT_NAME: "${{ inputs.name || github.actor }}"
+        INPUT_EMAIL: "${{ inputs.email || format('{0}+{1}@users.noreply.github.com', github.actor_id, github.actor) }}"
+        INPUT_EXPIRE: '${{ inputs.expire }}'
+        INPUT_PASSPHRASE: '${{ inputs.passphrase }}'
+        INPUT_PUBLIC_KEY_PATH: "${{ inputs.public-key-path || format('{0}.pub.asc', github.event.repository.name) }}"
+        INPUT_PRIVATE_KEY_PATH: "${{ inputs.private-key-path || format('{0}.priv.asc', github.event.repository.name) }}"
+      run: $GITHUB_ACTION_PATH/main.sh
+      shell: bash
