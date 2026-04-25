@@ -44,10 +44,24 @@ fi
 
 default_key_basename="$(default_key_name)"
 INPUT_EXPIRE="${INPUT_EXPIRE:-0}"
+INPUT_IMPORT="${INPUT_IMPORT:-false}"
 INPUT_PUBLIC_KEY_PATH="${INPUT_PUBLIC_KEY_PATH:-${default_key_basename}.pub.asc}"
 INPUT_PRIVATE_KEY_PATH="${INPUT_PRIVATE_KEY_PATH:-${default_key_basename}.priv.asc}"
 
-for field in INPUT_NAME INPUT_EMAIL INPUT_EXPIRE INPUT_PASSPHRASE INPUT_PUBLIC_KEY_PATH INPUT_PRIVATE_KEY_PATH; do
+case "${INPUT_IMPORT,,}" in
+    true)
+        INPUT_IMPORT="true"
+        ;;
+    false)
+        INPUT_IMPORT="false"
+        ;;
+    *)
+        echo "::error::INPUT_IMPORT must be either true or false"
+        exit 1
+        ;;
+esac
+
+for field in INPUT_NAME INPUT_EMAIL INPUT_EXPIRE INPUT_PASSPHRASE INPUT_PUBLIC_KEY_PATH INPUT_PRIVATE_KEY_PATH INPUT_IMPORT; do
     if [[ "${!field}" == *$'\n'* ]]; then
         echo "::error::${field} must not contain newlines"
         exit 1
@@ -59,6 +73,7 @@ gnupg_home="${tmpdir}/gnupg"
 batch_file="${tmpdir}/genkey"
 public_key_path="$(resolve_output_path "${INPUT_PUBLIC_KEY_PATH}")"
 private_key_path="$(resolve_output_path "${INPUT_PRIVATE_KEY_PATH}")"
+output_gnupg_home="${gnupg_home}"
 
 if [[ -z "${public_key_path}" || -z "${private_key_path}" ]]; then
     echo "::error::public and private key paths must not be empty"
@@ -66,7 +81,9 @@ if [[ -z "${public_key_path}" || -z "${private_key_path}" ]]; then
 fi
 
 cleanup() {
-    rm -rf "${tmpdir}"
+    if [[ "${INPUT_IMPORT}" == "true" ]]; then
+        rm -rf "${tmpdir}"
+    fi
 }
 trap cleanup EXIT
 
@@ -107,7 +124,19 @@ GNUPGHOME="${gnupg_home}" "${gpg_bin}" "${generate_args[@]}" --gen-key "${batch_
 GNUPGHOME="${gnupg_home}" "${gpg_bin}" --batch --yes --armor --export "${INPUT_EMAIL}" > "${public_key_path}"
 GNUPGHOME="${gnupg_home}" "${gpg_bin}" "${secret_export_args[@]}" > "${private_key_path}"
 
+if [[ "${INPUT_IMPORT}" == "true" ]]; then
+    output_gnupg_home="${GNUPGHOME:-${HOME}/.gnupg}"
+    mkdir -p "${output_gnupg_home}"
+    chmod 700 "${output_gnupg_home}"
+
+    GNUPGHOME="${output_gnupg_home}" "${gpg_bin}" --batch --yes --import "${public_key_path}"
+    GNUPGHOME="${output_gnupg_home}" "${gpg_bin}" --batch --yes --import "${private_key_path}"
+fi
+
 {
     echo "public-key-path=${public_key_path}"
     echo "private-key-path=${private_key_path}"
+    echo "gnupg-home=${output_gnupg_home}"
+    echo "name=${INPUT_NAME}"
+    echo "email=${INPUT_EMAIL}"
 } >> "${GITHUB_OUTPUT}"

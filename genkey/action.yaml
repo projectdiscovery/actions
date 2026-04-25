@@ -16,6 +16,10 @@ inputs:
     description: 'Passphrase for the secret key. Leave empty to disable protection.'
     required: false
     default: ''
+  import:
+    description: 'If true, import the generated keypair into the local GnuPG home instead of only keeping it in the generated keyring.'
+    required: false
+    default: 'false'
   public-key-path:
     description: 'Path where the armored public key should be written. Defaults to <repository>.pub.asc when empty.'
     required: false
@@ -32,6 +36,15 @@ outputs:
   private-key-path:
     description: 'Path to the exported armored private key'
     value: '${{ steps.genkey.outputs.private-key-path }}'
+  gnupg-home:
+    description: 'Path to the GnuPG home where the generated keypair is available after the action finishes'
+    value: '${{ steps.genkey.outputs.gnupg-home }}'
+  name:
+    description: 'Resolved name used for the generated GPG identity'
+    value: '${{ steps.genkey.outputs.name }}'
+  email:
+    description: 'Resolved email used for the generated GPG identity'
+    value: '${{ steps.genkey.outputs.email }}'
 
 runs:
   using: 'composite'
@@ -43,6 +56,7 @@ runs:
         INPUT_EMAIL: "${{ inputs.email || format('{0}+{1}@users.noreply.github.com', github.actor_id, github.actor) }}"
         INPUT_EXPIRE: '${{ inputs.expire }}'
         INPUT_PASSPHRASE: '${{ inputs.passphrase }}'
+        INPUT_IMPORT: '${{ inputs.import }}'
         INPUT_PUBLIC_KEY_PATH: "${{ inputs.public-key-path || format('{0}.pub.asc', github.event.repository.name) }}"
         INPUT_PRIVATE_KEY_PATH: "${{ inputs.private-key-path || format('{0}.priv.asc', github.event.repository.name) }}"
       run: $GITHUB_ACTION_PATH/main.sh
