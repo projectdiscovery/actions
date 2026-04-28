@@ -1,24 +1,34 @@
-const core = require('@actions/core')
-const exec = require('@actions/exec')
-const github = require('@actions/github')
-const context = JSON.parse(process.env.GITHUB_CONTEXT)
-const currentTag = process.env.CURRENT_TAG.trim()
-const token = process.env.INPUT_TOKEN
-const always = (process.env.INPUT_ALWAYS === 'true')
-const logDirectory = process.env.INPUT_LOG_DIRECTORY
-const metadata = process.env.INPUT_METADATA
-const prerelease = process.env.INPUT_PRERELEASE
-const tagMode = process.env.INPUT_TAG_MODE
-const tagPattern = process.env.INPUT_TAG_PATTERN
-const tagPrefix = process.env.INPUT_TAG_PREFIX
-const v0 = (process.env.INPUT_V0 === 'true')
-const setFailed = (process.env.INPUT_SET_FAILED === 'true')
-const releaseCreate = (process.env.INPUT_RELEASE_CREATE === 'true')
-const releaseName = process.env.INPUT_RELEASE_NAME
-const releaseDraft = (process.env.INPUT_RELEASE_DRAFT === 'true')
-const releaseMakeLatest = (process.env.INPUT_RELEASE_MAKE_LATEST === 'true')
+import * as core from '@actions/core'
+import * as exec from '@actions/exec'
+import * as github from '@actions/github'
+
+function requiredEnv(name) {
+  const value = process.env[name]
+
+  if (value === undefined) {
+    throw new Error(`Missing required environment variable: ${name}`)
+  }
+
+  return value
+}
 
 async function main() {
+  const context = JSON.parse(requiredEnv('GITHUB_CONTEXT'))
+  const currentTag = requiredEnv('CURRENT_TAG').trim()
+  const token = requiredEnv('INPUT_TOKEN')
+  const always = (process.env.INPUT_ALWAYS === 'true')
+  const logDirectory = process.env.INPUT_LOG_DIRECTORY
+  const metadata = process.env.INPUT_METADATA
+  const prerelease = process.env.INPUT_PRERELEASE
+  const tagMode = process.env.INPUT_TAG_MODE
+  const tagPattern = process.env.INPUT_TAG_PATTERN
+  const tagPrefix = process.env.INPUT_TAG_PREFIX
+  const v0 = (process.env.INPUT_V0 === 'true')
+  const releaseCreate = (process.env.INPUT_RELEASE_CREATE === 'true')
+  const releaseName = process.env.INPUT_RELEASE_NAME
+  const releaseDraft = (process.env.INPUT_RELEASE_DRAFT === 'true')
+  const releaseMakeLatest = (process.env.INPUT_RELEASE_MAKE_LATEST === 'true')
+
   if (currentTag === '') throw new Error('No current tag found.')
 
   core.debug("Setting up Octokit...")
@@ -97,7 +107,7 @@ async function main() {
 }
 
 main().catch((error) => {
-  if (setFailed) {
+  if (process.env.INPUT_SET_FAILED === 'true') {
     core.setFailed(error.message)
   }
   else {

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Setup Nuclei",
   "main": "download.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,6 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^3.0.0",
+    "@actions/exec": "^3.0.0",
     "@actions/github": "^9.1.0",
     "@actions/tool-cache": "^4.0.0"
   }
