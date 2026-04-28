@@ -1,14 +1,28 @@
-const core = require('@actions/core')
-const github = require('@actions/github')
-const tc = require('@actions/tool-cache')
+import path from 'node:path'
 
-module.exports = async ({version, token}) => {
-  const path = require('path')
-  const os = process.env.RUNNER_OS === "macOS" || process.env.RUNNER_OS.toLowerCase()
-  const arch = process.env.RUNNER_ARCH.toLowerCase()
+import * as core from '@actions/core'
+import * as github from '@actions/github'
+import * as tc from '@actions/tool-cache'
+
+function requiredEnv(name) {
+  const value = process.env[name]
+
+  if (value === undefined) {
+    throw new Error(`Missing required environment variable: ${name}`)
+  }
+
+  return value
+}
+
+export default async function download({ version, token }) {
+  const runnerOs = requiredEnv('RUNNER_OS')
+  const runnerArch = requiredEnv('RUNNER_ARCH')
+  const workspace = requiredEnv('GITHUB_WORKSPACE')
+  const os = runnerOs === 'macOS' ? 'macOS' : runnerOs.toLowerCase()
+  const arch = runnerArch.toLowerCase()
     .replace('x86', '386')
     .replace('x64', 'amd64')
-  const repo = {owner: 'projectdiscovery', repo: 'nuclei'}
+  const repo = { owner: 'projectdiscovery', repo: 'nuclei' }
   const octokit = github.getOctokit(token)
 
   try {
@@ -22,7 +36,7 @@ module.exports = async ({version, token}) => {
       await octokit.rest.repos.getReleaseByTag({...repo, tag: version})
     }
   } catch (error) {
-    throw new Error(`Could not get "${version}" tag: ${error.message}`)    
+    throw new Error(`Could not get "${version}" tag: ${error.message}`)
   }
 
   const asset = `nuclei_${version.replace(/^v/, '')}_${os}_${arch}.zip`
@@ -34,7 +48,7 @@ module.exports = async ({version, token}) => {
   if (nucleiPath) {
     core.notice(`nuclei ${version} found in cache`)
   } else {
-    nucleiPath = path.join(process.env.GITHUB_WORKSPACE, '../', 'nuclei')
+    nucleiPath = path.join(workspace, '../', 'nuclei')
 
     let zipPath
     try {
