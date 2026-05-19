@@ -77,7 +77,7 @@ This action is a `composite` action.
     # Default: true
 
     max-retries:
-    # Maximum number of merge attempts for transient merge failures such as parallel base branch updates, network issues, or GitHub rate limits.
+    # Maximum number of merge attempts for transient merge failures.
     #
     # Required: false
     # Default: 3
