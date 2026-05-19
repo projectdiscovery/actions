@@ -28,6 +28,35 @@ fi
 MAX_ATTEMPTS="${INPUT_MAX_RETRIES:-3}"
 DELAY="${INPUT_RETRY_DELAY:-5}"
 
+# Patterns that indicate a transient failure worth retrying. Anything
+# else (merge conflict, branch protection, missing review, etc.) is a
+# real failure and we fail fast instead of burning retries.
+TRANSIENT_PATTERNS=(
+    "Base branch was modified"
+    "HTTP 5"
+    "rate limit"
+    "secondary rate limit"
+    "i/o timeout"
+    "connection reset"
+    "connection refused"
+    "could not resolve host"
+    "TLS handshake timeout"
+    "EOF"
+)
+
+is_transient() {
+    local err="$1" pat rc=1
+    shopt -s nocasematch
+    for pat in "${TRANSIENT_PATTERNS[@]}"; do
+        if [[ "${err}" == *"${pat}"* ]]; then
+            rc=0
+            break
+        fi
+    done
+    shopt -u nocasematch
+    return "${rc}"
+}
+
 attempt=1
 while :; do
     if STDERR_OUTPUT=$(gh pr merge "${PR_NUMBER}" \
@@ -44,9 +73,9 @@ while :; do
         exit 0
     fi
 
-    # Only retry on transient errors caused by a parallel merge advancing the base branch.
-    if [[ "${STDERR_OUTPUT}" == *"Base branch was modified"* ]] && (( attempt < MAX_ATTEMPTS )); then
-        echo "::warning::PR #${PR_NUMBER}: base branch was modified during merge (attempt ${attempt}/${MAX_ATTEMPTS}). Retrying in ${DELAY}s..."
+    if is_transient "${STDERR_OUTPUT}" && (( attempt < MAX_ATTEMPTS )); then
+        echo "::warning::PR #${PR_NUMBER}: transient merge failure (attempt ${attempt}/${MAX_ATTEMPTS}). Retrying in ${DELAY}s..."
+        echo "${STDERR_OUTPUT}" >&2
         sleep "${DELAY}"
         DELAY=$(( DELAY * 2 ))
         attempt=$(( attempt + 1 ))
