@@ -13,6 +13,8 @@ Automatically merge a pull request.
 | `merge-method` | <p>Merge method (merge, squash, rebase).</p> | `false` | `squash` |
 | `delete-branch` | <p>Delete branch after merge.</p> | `false` | `true` |
 | `auto` | <p>Enable GitHub auto-merge (automatically merge ONLY after necessary requirements are met).</p> | `false` | `true` |
+| `max-retries` | <p>Maximum number of merge attempts for transient merge failures.</p> | `false` | `3` |
+| `retry-delay` | <p>Initial delay in seconds before retrying a transient merge failure (doubles exponentially after each retry).</p> | `false` | `5` |
 
 
 ## Outputs
@@ -73,6 +75,18 @@ This action is a `composite` action.
     #
     # Required: false
     # Default: true
+
+    max-retries:
+    # Maximum number of merge attempts for transient merge failures such as parallel base branch updates, network issues, or GitHub rate limits.
+    #
+    # Required: false
+    # Default: 3
+
+    retry-delay:
+    # Initial delay in seconds before retrying a transient merge failure (doubles exponentially after each retry).
+    #
+    # Required: false
+    # Default: 5
 ```
 
 

@@ -29,6 +29,14 @@ inputs:
     description: "Enable GitHub auto-merge (automatically merge ONLY after necessary requirements are met)."
     required: false
     default: "true"
+  max-retries:
+    description: "Maximum number of merge attempts for transient merge failures."
+    required: false
+    default: "3"
+  retry-delay:
+    description: "Initial delay in seconds before retrying a transient merge failure (doubles exponentially after each retry)."
+    required: false
+    default: "5"
 
 outputs:
   merged:
@@ -64,6 +72,8 @@ runs:
         INPUT_MERGE_METHOD: ${{ inputs.merge-method }}
         INPUT_DELETE_BRANCH: ${{ inputs.delete-branch }}
         INPUT_AUTO: ${{ inputs.auto }}
+        INPUT_MAX_RETRIES: ${{ inputs.max-retries }}
+        INPUT_RETRY_DELAY: ${{ inputs.retry-delay }}
         OUTPUT_PR_NUMBER: ${{ steps.pr.outputs.number }}
       run: $GITHUB_ACTION_PATH/merge.sh
     
