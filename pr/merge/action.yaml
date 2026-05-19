@@ -30,11 +30,11 @@ inputs:
     required: false
     default: "true"
   max-retries:
-    description: "Maximum number of merge attempts when the base branch is modified by a parallel merge."
+    description: "Maximum number of merge attempts for transient merge failures."
     required: false
     default: "3"
   retry-delay:
-    description: "Initial delay in seconds between retries (doubles exponentially each attempt)."
+    description: "Initial delay in seconds before retrying a transient merge failure (doubles exponentially after each retry)."
     required: false
     default: "5"
 
