@@ -25,16 +25,34 @@ if [[ "${INPUT_AUTO:-}" == "true" ]]; then
     AUTO_FLAG="--auto"
 fi
 
-gh pr merge "${PR_NUMBER}" \
-    --repo "${INPUT_REPOSITORY}" \
-    --${INPUT_MERGE_METHOD} \
-    ${AUTO_FLAG} \
-    ${DELETE_FLAG} \
-    && {
-      echo "merged=true"
-      echo "pr-number=${PR_NUMBER}"
-    } >> "${GITHUB_OUTPUT}" \
-    || {
-      printErrorWithExit "Failed to merge PR #${PR_NUMBER}." 1
-    }
+MAX_ATTEMPTS="${INPUT_MAX_RETRIES:-3}"
+DELAY="${INPUT_RETRY_DELAY:-5}"
 
+attempt=1
+while :; do
+    if STDERR_OUTPUT=$(gh pr merge "${PR_NUMBER}" \
+        --repo "${INPUT_REPOSITORY}" \
+        --${INPUT_MERGE_METHOD} \
+        ${AUTO_FLAG} \
+        ${DELETE_FLAG} \
+        2>&1); then
+        {
+            echo "merged=true"
+            echo "pr-number=${PR_NUMBER}"
+        } >> "${GITHUB_OUTPUT}"
+        echo "Successfully merged PR #${PR_NUMBER} (attempt ${attempt}/${MAX_ATTEMPTS})."
+        exit 0
+    fi
+
+    # Only retry on transient errors caused by a parallel merge advancing the base branch.
+    if [[ "${STDERR_OUTPUT}" == *"Base branch was modified"* ]] && (( attempt < MAX_ATTEMPTS )); then
+        echo "::warning::PR #${PR_NUMBER}: base branch was modified during merge (attempt ${attempt}/${MAX_ATTEMPTS}). Retrying in ${DELAY}s..."
+        sleep "${DELAY}"
+        DELAY=$(( DELAY * 2 ))
+        attempt=$(( attempt + 1 ))
+        continue
+    fi
+
+    echo "${STDERR_OUTPUT}" >&2
+    printErrorWithExit "Failed to merge PR #${PR_NUMBER} after ${attempt} attempt(s)." 1
+done
