@@ -7,7 +7,7 @@ Run actions/setup-go
 | name | description | required | default |
 | --- | --- | --- | --- |
 | `go-version` | <p>The Go version to download (if necessary) and use. Supports semver spec and ranges. Be sure to enclose this option in single quotation marks.</p> | `false` | `""` |
-| `go-version-file` | <p>Path to the go.mod, go.work, .go-version, or .tool-versions file.</p> | `false` | `""` |
+| `go-version-file` | <p>Path to the go.mod, go.work, alternate .mod, .go-version, or .tool-versions file.</p> | `false` | `""` |
 | `check-latest` | <p>Set this option to true if you want the action to always check for the latest available version that satisfies the version spec</p> | `false` | `true` |
 | `token` | <p>Used to pull Go distributions from go-versions. Since there's a default, this is typically not supplied by the user. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting.</p> | `false` | `${{ github.server_url == 'https://github.com' && github.token || '' }}` |
 | `cache` | <p>Used to specify whether caching is needed. Set to true, if you'd like to enable caching.</p> | `false` | `true` |
@@ -32,7 +32,7 @@ This action is a `composite` action.
     # Default: ""
 
     go-version-file:
-    # Path to the go.mod, go.work, .go-version, or .tool-versions file.
+    # Path to the go.mod, go.work, alternate .mod, .go-version, or .tool-versions file.
     #
     # Required: false
     # Default: ""
