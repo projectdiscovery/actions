@@ -13,6 +13,6 @@
     "@actions/core": "^3.0.0",
     "@actions/exec": "^3.0.0",
     "@actions/github": "^9.1.0",
-    "@types/node": "^25.0.2"
+    "@types/node": "^26.1.0"
   }
 }
