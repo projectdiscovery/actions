@@ -6,7 +6,7 @@ Run GoReleaser
 
 | name | description | required | default |
 | --- | --- | --- | --- |
-| `release` | <p>Run without snapshot</p> | `false` | `false` |
+| `release` | <p>Run a full release instead of a snapshot binary build</p> | `false` | `false` |
 | `workdir` | <p>Working directory</p> | `false` | `.` |
 | `args` | <p>Run with arguments</p> | `false` | `""` |
 
@@ -21,7 +21,7 @@ This action is a `composite` action.
 - uses: projectdiscovery/actions/goreleaser@v1
   with:
     release:
-    # Run without snapshot
+    # Run a full release instead of a snapshot binary build
     #
     # Required: false
     # Default: false
