@@ -28,6 +28,7 @@ async function main() {
   const releaseName = process.env.INPUT_RELEASE_NAME
   const releaseDraft = (process.env.INPUT_RELEASE_DRAFT === 'true')
   const releaseMakeLatest = (process.env.INPUT_RELEASE_MAKE_LATEST === 'true')
+  const dryRun = (process.env.INPUT_DRY_RUN === 'true')
 
   if (currentTag === '') throw new Error('No current tag found.')
 
@@ -61,6 +62,14 @@ async function main() {
 
   if (nextVersion === currentTag) {
     throw new Error(`Current tag is already ${nextVersion}, skipping.`)
+  }
+
+  // Always expose the computed next version so callers can preview it.
+  core.setOutput('next-tag', nextVersion)
+
+  if (dryRun) {
+    core.notice(`DRY RUN: would create and push tag ${nextVersion} (no tag or release created)`)
+    return
   }
 
   core.info(`Creating and pushing tag ${nextVersion}...`)

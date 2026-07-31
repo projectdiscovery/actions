@@ -20,13 +20,15 @@ Run caarlos0/svu - next version based on git history
 | `release-name` | <p>name of the release (if not set, automatically generated)</p> | `false` | `""` |
 | `release-draft` | <p>create the release as a draft</p> | `false` | `false` |
 | `release-make-latest` | <p>make the release the latest one</p> | `false` | `true` |
+| `dry-run` | <p>compute the next version without creating a tag or release (safe for PR workflows)</p> | `false` | `false` |
 
 
 ## Outputs
 
 | name | description |
 | --- | --- |
-| `tag` | <p>The new created and pushed tag</p> |
+| `tag` | <p>The new created and pushed tag (empty when dry-run is true)</p> |
+| `next-tag` | <p>The computed next version tag (set regardless of dry-run)</p> |
 
 
 ## Runs
@@ -121,6 +123,12 @@ This action is a `composite` action.
     #
     # Required: false
     # Default: true
+
+    dry-run:
+    # compute the next version without creating a tag or release (safe for PR workflows)
+    #
+    # Required: false
+    # Default: false
 ```
 
 

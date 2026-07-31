@@ -39,11 +39,17 @@ inputs:
   release-make-latest:
     description: 'make the release the latest one'
     default: 'true'
+  dry-run:
+    description: 'compute the next version without creating a tag or release (safe for PR workflows)'
+    default: 'false'
 
 outputs:
   tag:
-    description: 'The new created and pushed tag'
+    description: 'The new created and pushed tag (empty when dry-run is true)'
     value: '${{ steps.svu.outputs.tag }}'
+  next-tag:
+    description: 'The computed next version tag (set regardless of dry-run)'
+    value: '${{ steps.svu.outputs.next-tag }}'
 
 runs:
   using: "composite"
@@ -88,6 +94,7 @@ runs:
         INPUT_RELEASE_NAME: '${{ inputs.release-name }}'
         INPUT_RELEASE_DRAFT: '${{ inputs.release-draft }}'
         INPUT_RELEASE_MAKE_LATEST: '${{ inputs.release-make-latest }}'
+        INPUT_DRY_RUN: '${{ inputs.dry-run }}'
         GITHUB_CONTEXT: '${{ toJson(github) }}'
         CURRENT_TAG: '${{ steps.tag.outputs.tag }}'
       shell: bash
