@@ -1,0 +1,87 @@
+name: "🔖 Release Preview"
+
+# Reusable workflow: computes the next semver version and optionally validates
+# that the project builds cleanly — without creating any tag or GitHub release.
+# Safe to call from pull_request workflows in downstream repos.
+#
+# Usage in proxify (or any Go repo):
+#
+#   jobs:
+#     release-preview:
+#       uses: projectdiscovery/actions/.github/workflows/release-preview.yaml@master
+#       with:
+#         goreleaser-build: true
+#       secrets:
+#         token: ${{ secrets.GITHUB_TOKEN }}
+
+on:
+  workflow_call:
+    inputs:
+      goreleaser-build:
+        description: 'Run goreleaser snapshot build to verify the project compiles'
+        type: boolean
+        default: false
+      goreleaser-workdir:
+        description: 'Working directory for goreleaser (defaults to repo root)'
+        type: string
+        default: '.'
+      goreleaser-args:
+        description: 'Extra arguments forwarded to goreleaser build --snapshot'
+        type: string
+        default: ''
+      always-bump:
+        description: 'If no conventional commits trigger a bump, increment the patch anyway'
+        type: boolean
+        default: false
+      tag-prefix:
+        description: 'Tag prefix expected by svu'
+        type: string
+        default: 'v'
+    secrets:
+      token:
+        description: 'GitHub token (defaults to GITHUB_TOKEN)'
+        required: false
+    outputs:
+      next-tag:
+        description: 'The next version that would be released (e.g. v1.2.3)'
+        value: ${{ jobs.preview.outputs.next-tag }}
+
+jobs:
+  preview:
+    name: Release preview
+    runs-on: ubuntu-latest
+    outputs:
+      next-tag: ${{ steps.version.outputs.next-tag }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute next version (dry run)
+        id: version
+        uses: projectdiscovery/actions/svu-next@master
+        with:
+          token: ${{ secrets.token || github.token }}
+          dry-run: 'true'
+          always: '${{ inputs.always-bump }}'
+          tag-prefix: '${{ inputs.tag-prefix }}'
+          set-failed: 'false'
+
+      - name: Summarize next release
+        run: |
+          echo "### 🔖 Release preview" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Next version: **\`${{ steps.version.outputs.next-tag }}\`**" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "_No tag or GitHub release was created. This is a dry-run preview._" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Validate snapshot build
+        if: inputs.goreleaser-build
+        uses: projectdiscovery/actions/goreleaser@master
+        with:
+          release: 'false'
+          workdir: '${{ inputs.goreleaser-workdir }}'
+          args: '${{ inputs.goreleaser-args }}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.token || github.token }}
