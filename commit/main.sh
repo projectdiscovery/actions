@@ -14,5 +14,16 @@ while IFS= read -r file; do
 done <<< "${FILES}"
 
 commit=$(git commit -m "${MESSAGE}" 2>&1)
-[[ $? -gt 0 ]] && printWarning "Could not create commit: $(tail -n 1 <<< "${commit}")"
+commit_status=$?
+[[ ${commit_status} -gt 0 ]] && printWarning "Could not create commit: $(tail -n 1 <<< "${commit}")"
 printDebug "${commit}"
+
+if [[ "${PUSH:-false}" == "true" && ${commit_status} -eq 0 ]]; then
+    push=$(git push 2>&1)
+    push_status=$?
+    if [[ ${push_status} -gt 0 ]]; then
+        printWarning "Could not push commit: ${push}"
+        exit "${push_status}"
+    fi
+    printDebug "${push}"
+fi

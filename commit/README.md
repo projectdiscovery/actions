@@ -8,6 +8,7 @@ Run git-commit
 | --- | --- | --- | --- |
 | `files` | <p>Files to commit (newline-separated)</p> | `true` | `.` |
 | `message` | <p>Commit message</p> | `true` | `""` |
+| `push` | <p>Push after successfully creating a commit</p> | `false` | `false` |
 
 
 ## Runs
@@ -30,6 +31,12 @@ This action is a `composite` action.
     #
     # Required: true
     # Default: ""
+
+    push: false
+    # Push after successfully creating a commit
+    #
+    # Required: false
+    # Default: false
 ```
 
 

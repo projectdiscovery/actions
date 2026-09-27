@@ -2,6 +2,10 @@
 
 ProjectDiscovery's composite actions.
 
+## Usage examples
+
+- [Commit files and optionally push](commit/EXAMPLES.md)
+
 ## Releases
 
 * default HEAD branch (**`master`**) - latest code changes and updates, which *might* not have undergone thorough testing and quality assurance; **use at your own risk**.

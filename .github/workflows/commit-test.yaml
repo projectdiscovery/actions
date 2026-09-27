@@ -1,0 +1,74 @@
+name: Test commit action
+
+on:
+  pull_request:
+    paths:
+      - 'commit/**'
+      - '.github/workflows/commit-test.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shell-tests:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Test against local Git remotes
+        shell: bash
+        run: bash commit/test.sh
+
+  composite-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        push: ['false', 'true']
+    steps:
+      - uses: actions/checkout@v7
+      - name: Prepare a local remote and changed file
+        id: setup
+        shell: bash
+        run: |
+          git config user.name 'Commit action test'
+          git config user.email 'commit-test@example.invalid'
+          git checkout -B commit-action-test
+          git init --bare "$RUNNER_TEMP/commit-remote.git"
+          git remote set-url origin "$RUNNER_TEMP/commit-remote.git"
+          git push --set-upstream origin commit-action-test
+          echo "initial_commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          printf 'test change\n' > .commit-action-test.txt
+
+          # Provide logging helpers locally instead of downloading them.
+          mkdir -p "$RUNNER_TEMP/commit-bin"
+          cat > "$RUNNER_TEMP/commit-bin/curl" <<'EOF'
+          #!/usr/bin/env bash
+          cat <<'HELPERS'
+          printDebug() { printf '%s\n' "$*"; }
+          printWarning() { printf '%s\n' "$*" >&2; }
+          HELPERS
+          EOF
+          chmod +x "$RUNNER_TEMP/commit-bin/curl"
+          echo "$RUNNER_TEMP/commit-bin" >> "$GITHUB_PATH"
+      - uses: ./commit
+        with:
+          files: .commit-action-test.txt
+          message: 'test commit action'
+          push: ${{ matrix.push }}
+      - name: Verify local and remote commits
+        shell: bash
+        env:
+          PUSH: ${{ matrix.push }}
+          INITIAL_COMMIT: ${{ steps.setup.outputs.initial_commit }}
+        run: |
+          local_commit=$(git rev-parse HEAD)
+          remote_commit=$(git --git-dir="$RUNNER_TEMP/commit-remote.git" rev-parse refs/heads/commit-action-test)
+          [[ "$local_commit" != "$INITIAL_COMMIT" ]]
+          if [[ "$PUSH" == true ]]; then
+            [[ "$remote_commit" == "$local_commit" ]]
+          else
+            [[ "$remote_commit" == "$INITIAL_COMMIT" ]]
+          fi
