@@ -10,6 +10,10 @@ inputs:
     description: 'Commit message'
     required: true
     default: ''
+  push:
+    description: 'Push after successfully creating a commit'
+    required: false
+    default: 'false'
 
 runs:
   using: "composite"
@@ -18,4 +22,5 @@ runs:
       env:
         FILES: '${{ inputs.files }}'
         MESSAGE: '${{ inputs.message }}'
+        PUSH: '${{ inputs.push }}'
       shell: bash
