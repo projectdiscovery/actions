@@ -15,7 +15,6 @@ updates:
       - "/generate/checksum"
       - "/generate/db-indexer"
       - "/semver"
-      - "/cache/go-rod-browser"
       - "/cache/nuclei"
       - "/flamegraph"
       - "/free-disk-space"
