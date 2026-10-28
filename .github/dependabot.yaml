@@ -21,7 +21,6 @@ updates:
       - "/golangci-lint/v2"
       # - "/golangci-lint"
       - "/svu-next"
-      - "/templates/sync"
       - "/templates/stats"
       - "/goreleaser"
       - "/setup/python"
