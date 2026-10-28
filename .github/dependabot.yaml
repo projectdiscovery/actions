@@ -13,7 +13,6 @@ updates:
       - "/pr/merge"
       - "/pr/approve"
       - "/generate/checksum"
-      - "/generate/db-indexer"
       - "/semver"
       - "/flamegraph"
       - "/free-disk-space"
