@@ -13,17 +13,13 @@ updates:
       - "/pr/merge"
       - "/pr/approve"
       - "/generate/checksum"
-      - "/generate/db-indexer"
       - "/semver"
-      - "/cache/go-rod-browser"
-      - "/cache/nuclei"
       - "/flamegraph"
       - "/free-disk-space"
       - "/commit"
       - "/golangci-lint/v2"
       # - "/golangci-lint"
       - "/svu-next"
-      - "/templates/sync"
       - "/templates/stats"
       - "/goreleaser"
       - "/setup/python"
@@ -32,7 +28,6 @@ updates:
       - "/setup/git"
       - "/setup/ajv"
       - "/setup/nuclei/templates"
-      - "/setup/nuclei"
       - "/setup/templateman"
     schedule:
       interval: "weekly"
@@ -46,7 +41,6 @@ updates:
   - package-ecosystem: "npm"
     directories: # find . -name package.json -not -path "*/node_modules/*" -exec bash -c 'dirname "${1##.}"' bash {} \;
       - "/svu-next"
-      - "/setup/nuclei"
     schedule:
       interval: "weekly"
     groups:
