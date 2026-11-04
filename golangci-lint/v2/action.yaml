@@ -14,13 +14,13 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/cache@v6
+    - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: |
           ~/.cache/golangci-lint
         key: golangci-lint_${{ runner.os }}
         restore-keys: golangci-lint_
-    - uses: golangci/golangci-lint-action@v9
+    - uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
       with:
         version: ${{ inputs.version }}
         args: ${{ inputs.args }}

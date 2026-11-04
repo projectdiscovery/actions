@@ -26,10 +26,53 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: dwisiswant0/setup-go@main
+    # actions/setup-go reads the version only from go.mod, go.work, .go-version
+    # and .tool-versions. It reads any other file (for example go.tool.mod) as a
+    # raw version string. This step reads the toolchain or go directive of
+    # go.mod, go.work and other .mod files and gives the result as go-version.
+    # If it finds no directive, it gives the file to actions/setup-go unchanged.
+    - id: version
+      shell: bash
+      env:
+        INPUT_VERSION: ${{ inputs.go-version }}
+        INPUT_VERSION_FILE: ${{ inputs.go-version == '' && (inputs.go-version-file || 'go.mod') || inputs.go-version-file }}
+      run: |
+        version=""
+        version_file="$INPUT_VERSION_FILE"
+        if [ -n "$INPUT_VERSION" ]; then
+          version="$INPUT_VERSION"
+        else
+          case "$(basename -- "$version_file")" in
+            go.work | *.mod)
+              if [ -f "$version_file" ]; then
+                parsed=""
+                # toolchain directive: https://go.dev/ref/mod#go-mod-file-toolchain
+                if [ "${GOTOOLCHAIN:-}" != "local" ]; then
+                  parsed=$(grep -m1 -E '^toolchain[[:space:]]+go1\.[0-9]+(\.[0-9]+|(beta|rc)[0-9]+)?([[:space:]-]|$)' -- "$version_file" \
+                    | sed -E 's/^toolchain[[:space:]]+go(1\.[0-9]+(\.[0-9]+|(beta|rc)[0-9]+)?).*$/\1/') || true
+                fi
+                # go directive: https://go.dev/ref/mod#go-mod-file-go
+                if [ -z "$parsed" ]; then
+                  parsed=$(grep -m1 -E '^go[[:space:]]+[0-9]+(\.[0-9]+)*((beta|rc)[0-9]+)?([[:space:]]|$)' -- "$version_file" \
+                    | sed -E 's/^go[[:space:]]+([0-9]+(\.[0-9]+)*((beta|rc)[0-9]+)?).*$/\1/') || true
+                fi
+                if [ -n "$parsed" ]; then
+                  version="$parsed"
+                  version_file=""
+                fi
+              fi
+              ;;
+          esac
+        fi
+        {
+          echo "go-version=$version"
+          echo "go-version-file=$version_file"
+        } >> "$GITHUB_OUTPUT"
+
+    - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
       with:
-        go-version: ${{ inputs.go-version }}
-        go-version-file: ${{ inputs.go-version == '' && (inputs.go-version-file || 'go.mod') || inputs.go-version-file }}
+        go-version: ${{ steps.version.outputs.go-version }}
+        go-version-file: ${{ steps.version.outputs.go-version-file }}
         check-latest: ${{ inputs.check-latest }}
         token: ${{ inputs.token }}
         cache: ${{ inputs.cache }}
