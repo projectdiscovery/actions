@@ -46,12 +46,12 @@ runs:
             go.work | *.mod)
               if [ -f "$version_file" ]; then
                 parsed=""
-                # toolchain directive: https://go.dev/ref/mod#go-mod-file-toolchain
+                # Read the toolchain directive first, see https://go.dev/ref/mod#go-mod-file-toolchain.
                 if [ "${GOTOOLCHAIN:-}" != "local" ]; then
                   parsed=$(grep -m1 -E '^toolchain[[:space:]]+go1\.[0-9]+(\.[0-9]+|(beta|rc)[0-9]+)?([[:space:]-]|$)' -- "$version_file" \
                     | sed -E 's/^toolchain[[:space:]]+go(1\.[0-9]+(\.[0-9]+|(beta|rc)[0-9]+)?).*$/\1/') || true
                 fi
-                # go directive: https://go.dev/ref/mod#go-mod-file-go
+                # Fall back to the go directive, see https://go.dev/ref/mod#go-mod-file-go.
                 if [ -z "$parsed" ]; then
                   parsed=$(grep -m1 -E '^go[[:space:]]+[0-9]+(\.[0-9]+)*((beta|rc)[0-9]+)?([[:space:]]|$)' -- "$version_file" \
                     | sed -E 's/^go[[:space:]]+([0-9]+(\.[0-9]+)*((beta|rc)[0-9]+)?).*$/\1/') || true
