@@ -1,6 +1,6 @@
 ## Description
 
-Run projectdiscovery/setup-go
+Run actions/setup-go
 
 ## Inputs
 
@@ -32,7 +32,7 @@ This action is a `composite` action.
     # Default: ""
 
     go-version-file:
-    # Path to the go.mod, go.work, alternate .mod, .go-version, or .tool-versions file.
+    # Path to a .mod file (such as go.mod or go.tool.mod), go.work, .go-version, or .tool-versions file.
     #
     # Required: false
     # Default: ""
