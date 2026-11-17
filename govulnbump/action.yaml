@@ -1,0 +1,80 @@
+name: 'govulnbump'
+description: 'Upgrade Go dependencies that have known vulnerabilities to versions that fix them'
+
+inputs:
+  # version:
+  #   description: 'govulnbump version'
+  #   required: false
+  #   default: 'latest'
+  args:
+    description: 'Run with arguments (flags and patterns)'
+    required: false
+    default: ''
+  working-directory:
+    description: 'Directory of the module to upgrade'
+    required: false
+    default: '.'
+  create-pr:
+    description: "Commit the upgrades and open or update a pull request with govulnbump's report"
+    required: false
+    default: 'false'
+  pr-args:
+    description: 'Flags for `gh pr create` when create-pr opens a new pull request, such as `--label`, `--assignee`, `--reviewer`, `--milestone` or `--draft`'
+    required: false
+    default: ''
+  token:
+    description: 'GitHub token for create-pr, with `contents: write` and `pull-requests: write` permissions'
+    required: false
+    default: '${{ github.token }}'
+
+outputs:
+  exit-code:
+    description: 'govulnbump exit code: 0 if no vulnerabilities remain, 1 on error, 2 if the command line is invalid, 3 if vulnerabilities remain'
+    value: '${{ steps.govulnbump.outputs.exit-code }}'
+
+runs:
+  using: "composite"
+  steps:
+    # govulnbump requires a newer Go than the module being fixed may use, and
+    # setup-go exports GOTOOLCHAIN=local, so let go install switch toolchains.
+    # Clear settings meant for the module being fixed: GOFLAGS=-mod=vendor
+    # makes go install fail, and GOOS or GOARCH cross-compiles the binary.
+    # Install to a directory of this run's own, so the next steps don't depend
+    # on PATH and runs in background steps don't share files.
+    - id: install
+      run: |
+        dir="$(mktemp -d "${RUNNER_TEMP}/govulnbump.XXXXXX")"
+        GOBIN="${dir}" go install "go.dw1.io/x/vuln/cmd/govulnbump@${VERSION}"
+        echo "dir=${dir}" >> "${GITHUB_OUTPUT}"
+      env:
+        GOTOOLCHAIN: 'auto'
+        GOFLAGS: ''
+        GOOS: ''
+        GOARCH: ''
+        VERSION: 'latest'
+        # VERSION: '${{ inputs.version }}'
+      shell: bash
+    # govulnbump's go get must also switch toolchains, for -toolchain and for
+    # upgrades whose fixed version needs a newer Go.
+    - id: govulnbump
+      run: |
+        code=0
+        "${TEMP_DIR}/govulnbump" ${ARGS} | tee "${TEMP_DIR}/report.txt" || code=$?
+        echo "exit-code=${code}" >> "${GITHUB_OUTPUT}"
+        exit "${code}"
+      env:
+        ARGS: '${{ inputs.args }}'
+        GOTOOLCHAIN: 'auto'
+        TEMP_DIR: '${{ steps.install.outputs.dir }}'
+      working-directory: '${{ inputs.working-directory }}'
+      shell: bash
+    # Exit code 3 means some vulnerabilities remain, so still open a pull
+    # request with the ones that were fixed.
+    - if: ${{ !cancelled() && inputs.create-pr == 'true' && (steps.govulnbump.outputs.exit-code == '0' || steps.govulnbump.outputs.exit-code == '3') }}
+      run: '"${GITHUB_ACTION_PATH}/create-pr.sh"'
+      env:
+        GH_TOKEN: '${{ inputs.token }}'
+        PR_ARGS: '${{ inputs.pr-args }}'
+        TEMP_DIR: '${{ steps.install.outputs.dir }}'
+      working-directory: '${{ inputs.working-directory }}'
+      shell: bash
