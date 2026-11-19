@@ -17,6 +17,9 @@ inputs:
   pr-number:
     description: "PR number to merge. If not provided, it will be auto-detected from the event context."
     required: false
+  match-head-commit:
+    description: "Commit SHA that the PR head must match to allow the merge. GitHub doesn't keep this SHA when `auto` enables auto-merge, so set `auto` to `false` to merge only this commit. If not provided, the PR is merged at its current head."
+    required: false
   merge-method:
     description: "Merge method (merge, squash, rebase)."
     required: false
@@ -69,6 +72,7 @@ runs:
         GH_TOKEN: ${{ inputs.token }}
         INPUT_REPOSITORY: ${{ inputs.repository }}
         INPUT_PR_NUMBER: ${{ inputs.pr-number }}
+        INPUT_MATCH_HEAD_COMMIT: ${{ inputs.match-head-commit }}
         INPUT_MERGE_METHOD: ${{ inputs.merge-method }}
         INPUT_DELETE_BRANCH: ${{ inputs.delete-branch }}
         INPUT_AUTO: ${{ inputs.auto }}
