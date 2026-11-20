@@ -64,6 +64,7 @@ while :; do
         --${INPUT_MERGE_METHOD} \
         ${AUTO_FLAG} \
         ${DELETE_FLAG} \
+        ${INPUT_MATCH_HEAD_COMMIT:+--match-head-commit="${INPUT_MATCH_HEAD_COMMIT}"} \
         2>&1); then
         {
             echo "merged=true"

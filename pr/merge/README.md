@@ -10,6 +10,7 @@ Automatically merge a pull request.
 | `username` | <p>GitHub username associated with the token.</p> | `false` | `${{ github.actor }}` |
 | `repository` | <p>Repository in owner/repo format.</p> | `true` | `${{ github.repository }}` |
 | `pr-number` | <p>PR number to merge. If not provided, it will be auto-detected from the event context.</p> | `false` | `""` |
+| `match-head-commit` | <p>Commit SHA that the PR head must match to allow the merge. GitHub doesn't keep this SHA when <code>auto</code> enables auto-merge, so set <code>auto</code> to <code>false</code> to merge only this commit. If not provided, the PR is merged at its current head.</p> | `false` | `""` |
 | `merge-method` | <p>Merge method (merge, squash, rebase).</p> | `false` | `squash` |
 | `delete-branch` | <p>Delete branch after merge.</p> | `false` | `true` |
 | `auto` | <p>Enable GitHub auto-merge (automatically merge ONLY after necessary requirements are met).</p> | `false` | `true` |
@@ -54,6 +55,12 @@ This action is a `composite` action.
 
     pr-number:
     # PR number to merge. If not provided, it will be auto-detected from the event context.
+    #
+    # Required: false
+    # Default: ""
+
+    match-head-commit:
+    # Commit SHA that the PR head must match to allow the merge. GitHub doesn't keep this SHA when `auto` enables auto-merge, so set `auto` to `false` to merge only this commit. If not provided, the PR is merged at its current head.
     #
     # Required: false
     # Default: ""
