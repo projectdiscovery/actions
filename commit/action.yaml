@@ -10,6 +10,10 @@ inputs:
     description: 'Commit message'
     required: true
     default: ''
+  gpg-sign:
+    description: 'Sign the commit. `true` signs with the key git picks by default (`user.signingKey` when it is set), `false` skips signing even when `commit.gpgSign` is set, and any other value is the key ID, or for SSH the key path. The key must already be loaded into git or gpg, and `gpg.format` selects the signature type. If not provided, git config decides.'
+    required: false
+    default: ''
 
 runs:
   using: "composite"
@@ -18,4 +22,5 @@ runs:
       env:
         FILES: '${{ inputs.files }}'
         MESSAGE: '${{ inputs.message }}'
+        GPG_SIGN: '${{ inputs.gpg-sign }}'
       shell: bash
