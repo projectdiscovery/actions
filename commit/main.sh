@@ -20,7 +20,18 @@ if git diff --cached --quiet 2>/dev/null; then
     exit 0
 fi
 
-if ! commit=$(git commit -m "${MESSAGE}" 2>&1); then
+# Attach a key to the option as --gpg-sign=KEY. A separate argument would be
+# read as a pathspec, and a key starting with "-" as another option. "false"
+# maps to --no-gpg-sign so it means off, not a key ID named "false".
+sign=()
+case "${GPG_SIGN}" in
+    "") ;;
+    true) sign=(--gpg-sign) ;;
+    false) sign=(--no-gpg-sign) ;;
+    *) sign=(--gpg-sign="${GPG_SIGN}") ;;
+esac
+
+if ! commit=$(git commit "${sign[@]}" -m "${MESSAGE}" 2>&1); then
     # A workflow command ends at a line break, so escape git's output the way
     # @actions/core does to keep all of it, such as a hook's message or a
     # signing error, in one annotation.
