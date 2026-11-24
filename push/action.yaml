@@ -1,0 +1,37 @@
+name: 'Push'
+description: 'Push the commits a job made to its branch'
+
+inputs:
+  ref:
+    description: 'Branch to push to. Defaults to the branch the job checked out: `github.head_ref` for a `pull_request` event, otherwise `github.ref_name` when the run is on a branch. A run on a tag must set it. A `pull_request` job must check out `github.head_ref`, because actions/checkout checks out the merge commit by default. For a pull request from a fork, `github.head_ref` names the fork''s branch, not one on origin'
+    required: false
+    default: ''
+  token:
+    description: 'Token with `contents: write` permission, used only for the git commands of this action, so the checkout can use `persist-credentials: false`. Pass a secret or `github.token`, which the runner masks in the log. When empty, the action uses the credentials the checkout left in the git config'
+    required: false
+    default: ''
+  rebase:
+    description: 'Run `git pull --rebase` before pushing, which refuses to run with uncommitted changes. The rebase is skipped when the branch is not on the remote yet. With `false`, the push is rejected when the branch moved during the run, even without new commits'
+    required: false
+    default: 'true'
+  dry-run:
+    description: 'Pass `--dry-run` to `git push`, which does everything except send the update. The rebase still runs'
+    required: false
+    default: 'false'
+
+runs:
+  using: "composite"
+  steps:
+    # Compute the default here, not in the metadata: the runner uses a metadata
+    # default only when with: omits the input, so an empty ref that a caller
+    # forwards would not fall back to the checked-out branch. On a tag, REF is
+    # empty instead of the tag name, so main.sh fails rather than creating a
+    # branch named after the tag.
+    - run: '"${GITHUB_ACTION_PATH}/main.sh"'
+      env:
+        REF: "${{ inputs.ref || github.head_ref || (github.ref_type == 'branch' && github.ref_name) || '' }}"
+        TOKEN: '${{ inputs.token }}'
+        REBASE: '${{ inputs.rebase }}'
+        DRY_RUN: '${{ inputs.dry-run }}'
+        SERVER_URL: '${{ github.server_url }}'
+      shell: bash
